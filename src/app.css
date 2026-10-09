@@ -34,7 +34,7 @@ h1 { font-size: clamp(27px, 3vw, 36px); font-weight: 600; letter-spacing: -1.2px
 .mode-option.selected { background: #f1f7fa; border-color: #3b7e9b; color: #236783; }
 .mode-option input { position: absolute; top: 10px; right: 10px; width: 13px; height: 13px; margin: 0; }
 .mode-option strong { display: block; font-size: 13px; color: #183648; font-weight: 600; }
-.mode-option small { display: block; font-size: 10px; margin-top: 5px; }
+.mode-option small { display: block; font-size: 11px; margin-top: 5px; }
 input[type='checkbox'], input[type='radio'] { accent-color: #236783; flex-shrink: 0; cursor: pointer; }
 .section-description { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 17px; }
 .section-description p, .muted { font-size: 12px; color: #637782; margin: 0; line-height: 1.6; }
@@ -47,8 +47,8 @@ input[type='checkbox'], input[type='radio'] { accent-color: #236783; flex-shrink
 .subject-option input { width: 16px; height: 16px; margin: 0; }
 .subject-option > span:nth-of-type(1) { flex: 1; }
 .subject-option strong { display: block; font-size: 12px; font-weight: 600; }
-.subject-option small { display: block; font-size: 9px; color: #637782; margin-top: 4px; }
-.subject-count { color: #7a909c; font-size: 10px; }
+.subject-option small { display: block; font-size: 11px; color: #637782; margin-top: 4px; }
+.subject-count { color: #7a909c; font-size: 11px; }
 .formats-section .muted { margin-bottom: 15px; }
 .format-options { display: flex; flex-wrap: wrap; gap: 10px; }
 .format-options label { display: flex; align-items: center; gap: 7px; font-size: 11px; padding: 10px 12px; border: 1px solid #e0e8ed; border-radius: 7px; min-height: 42px; cursor: pointer; }
@@ -77,19 +77,19 @@ input[type='checkbox'], input[type='radio'] { accent-color: #236783; flex-shrink
 .total-row dd span { font-size: 11px; color: #637782; font-weight: 400; letter-spacing: 0; }
 .primary-button { width: 100%; border: 0; border-radius: 8px; background: #236783; color: #fff; display: flex; align-items: center; justify-content: center; gap: 16px; min-height: 47px; padding: 12px 16px; font-size: 13px; font-weight: 600; }
 .primary-button:hover:not(:disabled) { background: #19546f; }
-.replacement-note { font-size: 9px; color: #778c98; text-align: center; margin: 11px 0 21px; line-height: 1.6; }
+.replacement-note { font-size: 11px; color: #778c98; text-align: center; margin: 11px 0 21px; line-height: 1.6; }
 .availability-note { color: #236783; background: #edf5f8; padding: 10px; border-radius: 6px; font-size: 11px; line-height: 1.6; }
 .progress-overview { display: flex; justify-content: space-between; gap: 14px; padding: 25px 5px; }
 .progress-overview > div { display: flex; align-items: center; gap: 9px; }
 .stat-icon { display: grid; place-items: center; color: #528575; width: 30px; height: 30px; background: #e9f2ee; border-radius: 50%; }
 .stat-icon.review { color: #9b8152; background: #f3efe5; }
 .progress-overview strong { display: block; font-size: 19px; font-weight: 600; line-height: 1.3; }
-.progress-overview small { display: block; font-weight: 400; font-size: 9px; color: #637782; margin-top: 3px; }
+.progress-overview small { display: block; font-weight: 400; font-size: 11px; color: #637782; margin-top: 3px; }
 .question-bank { display: flex; align-items: center; gap: 17px; border: 1px solid #e0e8ed; border-radius: 12px; margin-top: 25px; padding: 22px 26px; background: #f0f5f8; }
 .question-bank h2 { margin: 0 0 5px; font-size: 14px; font-weight: 600; }
 .question-bank p { margin: 0; font-size: 11px; color: #637782; line-height: 1.6; }
 .bank-button { margin-left: auto; display: flex; gap: 15px; align-items: center; font-size: 12px; min-height: 44px; }
-.page-footer { display: flex; justify-content: space-between; align-items: center; padding: 26px 0; color: #8a9ba5; font-size: 10px; gap: 16px; }
+.page-footer { display: flex; justify-content: space-between; align-items: center; padding: 26px 0; color: #8a9ba5; font-size: 11px; gap: 16px; }
 .page-footer > span:first-child { color: #637782; font-weight: 600; }
 .page-footer p { margin: 0; }
 .dialog-description { color: #637782; line-height: 1.8; margin: 0 0 24px; }
@@ -121,27 +121,35 @@ input[type='checkbox'], input[type='radio'] { accent-color: #236783; flex-shrink
   .study-layout { grid-template-columns: 1fr; }
   .resume-banner { flex-wrap: wrap; padding: 18px; gap: 12px; margin-bottom: 20px; }
   .resume-copy { flex-basis: calc(100% - 60px); }
-  .resume-copy strong { font-size: 12px; }
-  .resume-copy p { font-size: 10px; line-height: 1.7; }
+  .resume-copy strong { font-size: 14px; }
+  .resume-copy p { font-size: 12px; line-height: 1.7; }
   .resume-banner .outline-button { margin-left: 54px; }
   .mode-options { grid-template-columns: 1fr 1fr; }
   .mode-option { padding: 18px 12px; align-items: flex-start; }
   .mode-option > svg { display: none; }
   .mode-option input { position: static; transform: none; width: 14px; height: 14px; margin-top: 2px; }
-  .mode-option strong { font-size: 11px; }
-  .mode-option small { font-size: 10px; line-height: 1.6; }
+  .mode-option strong { font-size: 13px; }
+  .mode-option small { font-size: 12px; line-height: 1.6; }
   .subject-grid { grid-template-columns: 1fr 1fr; }
   .subject-option { gap: 8px; padding: 13px 10px; }
-  .subject-option strong { font-size: 11px; }
-  .subject-option small { font-size: 9px; line-height: 1.6; }
+  .subject-option strong { font-size: 13px; }
+  .subject-option small { font-size: 12px; line-height: 1.6; }
   .subject-count { display: none; }
   .summary-card { padding-top: 24px; }
-  .progress-overview { justify-content: center; gap: 50px; padding: 21px 0 5px; }
+  .progress-overview { justify-content: center; gap: 20px; padding: 21px 0 5px; }
   .question-bank { flex-wrap: wrap; padding: 21px; }
   .question-bank > div { flex: 1; }
   .bank-button { margin-left: 0; }
-  .page-footer { flex-wrap: wrap; font-size: 9px; }
+  .page-footer { flex-wrap: wrap; font-size: 12px; }
   .page-footer p { display: none; }
+  .configuration-card .text-button, .format-options label,
+  .study-sidebar .quick-quantities button { font-size: 13px; }
+  .study-sidebar .replacement-note, .study-sidebar .availability-note,
+  .study-sidebar .progress-overview small, .study-sidebar .session-note,
+  .study-sidebar .total-row dd span { font-size: 12px; }
+  .question-bank p { font-size: 12px; }
+  .question-bank .bank-button { font-size: 13px; }
+  .study-sidebar .primary-button { font-size: 14px; }
 }
 @media (max-width: 390px) {
   .header-inner, .page-container { padding-left: 18px; padding-right: 18px; }
