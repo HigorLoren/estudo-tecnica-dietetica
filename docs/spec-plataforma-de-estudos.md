@@ -25,7 +25,7 @@ O uso atual dispensa cadastro. Configurações, histórico por questão e teste 
 | Banco de questões     | Configuração, resultado ou retorno da prática livre | Filtrar, abrir pergunta, voltar à configuração                 |
 | Questão / prática     | Iniciar teste ou selecionar pergunta no banco       | Responder, conferir, usar “Não sei”, avançar                   |
 | Resultado             | Conclusão de um teste                               | Consultar correções, montar outro teste, abrir banco           |
-| Exploração            | Aba Explorar 3D                                     | Escolher material, explorar, voltar à prática                  |
+| Exploração            | Aba Explorar                                        | Escolher exemplo, ajustar índices, voltar à prática            |
 | Dicas                 | Aba Dicas ou link direto                            | Buscar, navegar por assuntos, consultar referências            |
 
 O cabeçalho acompanha as telas e contém marca, nome da matéria e navegação por modo. Banco, questão e resultado pertencem ao modo Praticar.
@@ -150,11 +150,21 @@ As ações finais são “Montar outro teste” e “Abrir banco de questões”
 
 **Objetivo:** permitir a investigação de materiais sem exigir respostas ou atribuir nota.
 
+**Primeira implementação:** simulador visual de peso bruto, peso líquido e peso cozido.
+Oferece três exemplos ilustrativos, controles de PB, FC e IC, colunas proporcionais aos pesos,
+perda na limpeza e variação na cocção. Alterações atualizam o diagrama e os cálculos imediatamente.
+O botão “Restaurar exemplo” recupera os valores do exemplo selecionado. Os índices apresentados
+não são uma tabela técnica de alimentos. Esta exploração não registra tentativas nem altera a
+sessão do teste. “Praticar indicadores” abre o banco filtrado pelo assunto; “Consultar dicas e
+fontes” abre Dicas. Ao recarregar, a aplicação volta à configuração, como nas demais telas
+sem URL individual.
+
 **Experiência:** espaço de visualização, controles e informações sobre o material selecionado.
 
 O visualizador também é reutilizado em exercícios, com marcadores e alvos preparados por pergunta. Algumas questões oferecem estruturas vizinhas como apoio.
 
-**Estados:** carregamento, material pronto e falha com botão “Tentar novamente”.
+**Estados para materiais externos:** carregamento, material pronto e falha com botão
+“Tentar novamente”. O simulador inicial usa elementos locais e não depende de carregar arquivos.
 
 **Generalização:** manter a ideia de exploração de materiais como módulo opcional. A matéria pode utilizar imagens, diagramas ou outros recursos adequados ao conteúdo.
 

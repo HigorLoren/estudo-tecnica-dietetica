@@ -12,7 +12,19 @@ import { confirmSession, createSession, prepareQuestions, recordAttempt,
 import { useProgress } from './use-progress'
 import { createReviewConfiguration } from './result-model'
 import { TipsScreen } from './tips-screen'
-import { useNavigation } from './use-navigation'
+import { ExploreScreen } from './explore-screen'
+import { useNavigation, type Screen } from './use-navigation'
+
+function guideMode(screen: Screen) {
+  return screen === 'dicas' ? 2 : screen === 'explore' ? 1 : 0
+}
+
+function StudyGuide({ screen, onTips, onPractice }: {
+  screen: Screen; onTips: () => void; onPractice: () => void;
+}) {
+  return screen === 'dicas' ? <TipsScreen />
+    : <ExploreScreen onTips={onTips} onPractice={onPractice} />
+}
 
 export function App() {
   const { progress, getProgress, updateProgress, storageUnavailable, recoveryMessage,
@@ -81,14 +93,18 @@ export function App() {
   return (
     <>
       <Header onNotice={setNotice} onHome={onBack}
-        onTips={() => setScreen('dicas')} tipsActive={screen === 'dicas'} />
+        onTips={() => setScreen('dicas')} onExplore={() => setScreen('explore')}
+        activeMode={guideMode(screen)} />
       {storageUnavailable && <div className="app-status warning" role="status">
         Não foi possível salvar o progresso neste navegador. Você pode continuar estudando;
         os novos dados ficam disponíveis apenas enquanto esta página estiver aberta.
       </div>}
       {recoveryMessage && <div className="app-status" role="status"><span>{recoveryMessage}</span>
         <button className="text-button" onClick={dismissRecovery}>Entendi</button></div>}
-      {screen === 'dicas' ? <TipsScreen /> : (screen === 'practice' || free) && active ? <PracticeScreen session={active}
+      {['explore', 'dicas'].includes(screen) ? <StudyGuide screen={screen}
+        onTips={() => setScreen('dicas')}
+        onPractice={() => { setFilters({ subject: 'indicadores', type: 'all' }); setScreen('bank') }} />
+        : (screen === 'practice' || free) && active ? <PracticeScreen session={active}
         onDraft={onDraft} onConfirm={onConfirm} onNext={onNext} free={free} onJump={onJump}
         onBack={free ? () => setScreen('bank') : onBack} onRestart={onRestart}
         onReview={onReview} onOpenBank={() => setScreen('bank')} />

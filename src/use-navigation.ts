@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'preact/hooks'
 import { pageFromSearch } from './tips-model'
 
-export type Screen = 'configuration' | 'practice' | 'bank' | 'free' | 'dicas'
+export type Screen = 'configuration' | 'practice' | 'bank' | 'free' | 'dicas' | 'explore'
 
 export function useNavigation() {
   const [screen, setScreen] = useState<Screen>(() => pageFromSearch(window.location.search))
