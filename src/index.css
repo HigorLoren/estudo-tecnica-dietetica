@@ -1,13 +1,22 @@
-html,
-body,
-#app {
-  min-height: 100%;
+:root {
+  font-family: 'Avenir Next', 'Segoe UI', sans-serif;
+  color: #183648;
+  background: #f6f9fb;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
-
-body {
-  margin: 0;
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; }
+button, input { font: inherit; }
+button, a, input, label { -webkit-tap-highlight-color: transparent; }
+button { cursor: pointer; }
+button:disabled { cursor: not-allowed; }
+button:focus-visible, a:focus-visible, input:focus-visible {
+  outline: 3px solid #3688b1;
+  outline-offset: 4px;
 }
-
-code {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-}
+button { transition: background-color 140ms ease, border-color 140ms ease; }
+button:disabled { opacity: .45; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
