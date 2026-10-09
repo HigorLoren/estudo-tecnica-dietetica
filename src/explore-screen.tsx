@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'preact/hooks'
 import { Icon } from './icons'
-import { ExploreDiagram } from './explore-diagram'
+import { ExploreDiagram, ExplorePreview } from './explore-diagram'
 import { calculatePreparation, formatWeight, preparationExamples,
   type Preparation } from './explore-model'
 import './explore.css'
@@ -21,6 +21,7 @@ function ExploreControls({ values, onChange, onReset }: {
     <section className="explore-controls" aria-labelledby="explore-controls-title">
       <div className="explore-panel-heading"><h2 id="explore-controls-title">Experimente mudar</h2>
         <p>Ajuste um valor e compare as etapas.</p></div>
+      <ExplorePreview values={values} />
       {controls.map(control => <div className="explore-control" key={control.key}>
         <div><label htmlFor={`explore-${control.key}`}>{control.label}</label>
           <output htmlFor={`explore-${control.key}`}>
@@ -70,8 +71,8 @@ export function ExploreScreen({ onPractice, onTips }: {
         Os índices variam conforme o alimento e o preparo;
         estes valores não são uma tabela técnica.</p>
       <div className="explore-layout">
-        <ExploreDiagram values={values} />
         <ExploreControls values={values} onChange={setValues} onReset={() => setValues(example)} />
+        <ExploreDiagram values={values} />
       </div>
       <p className="visually-hidden" role="status" aria-live="polite">
         Peso bruto: {formatWeight(result.gross)} kg. Peso líquido: {formatWeight(result.liquid)} kg.

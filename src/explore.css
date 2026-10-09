@@ -8,6 +8,9 @@
 .explore-example-note { color: #637782; font-size: 12px; line-height: 1.7; margin: 15px 0 24px; max-width: 780px; }
 .explore-layout { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(270px, 1fr); gap: 24px; align-items: start; }
 .explore-visual, .explore-controls { background: #fff; border: 1px solid #dfe8ed; border-radius: 14px; padding: 27px; }
+.explore-visual { order: 1; }
+.explore-controls { order: 2; }
+.explore-preview { display: none; }
 .explore-panel-heading h2 { margin: 0 0 6px; font-size: 19px; font-weight: 600; letter-spacing: -.35px; }
 .explore-panel-heading p { font-size: 12px; color: #637782; line-height: 1.7; margin: 0; }
 .weight-stages { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 28px 0 22px; }
@@ -58,7 +61,19 @@
   .explore-examples button { padding: 13px 16px; }
   .explore-examples strong { margin-bottom: 3px; }
   .explore-visual, .explore-controls { padding: 20px 16px; }
-  .explore-controls { grid-template-columns: minmax(0, 1fr); }
+  .explore-controls { grid-template-columns: minmax(0, 1fr); order: 1; gap: 18px; }
+  .explore-visual { order: 2; }
+  .explore-preview { display: block; position: sticky; top: 0; z-index: 1; background: #fff; padding: 12px 0 16px; border-bottom: 1px solid #dfe8ed; }
+  .explore-preview > p { font-size: 12px; font-weight: 600; margin: 0 0 12px; }
+  .explore-preview-stages { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+  .explore-preview-stage > span { display: block; font-size: 10px; color: #637782; }
+  .explore-preview-stage > strong { display: block; font-size: clamp(16px, 4.5vw, 21px); font-weight: 600; margin: 6px 0 10px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .explore-preview-stage small { font-size: 10px; font-weight: 400; color: #637782; }
+  .explore-preview-track { height: 6px; background: #edf2f5; border-radius: 3px; overflow: hidden; }
+  .explore-preview-track > div { height: 100%; background: #bccfd9; border-radius: inherit; }
+  .liquid .explore-preview-track > div { background: #679bad; }
+  .cooked .explore-preview-track > div { background: #236783; }
+  .explore-control input { scroll-margin-top: 130px; }
   .explore-control > div { flex-wrap: nowrap; }
   .weight-stages { gap: 8px; }
   .weight-column { width: 84%; }

@@ -1,5 +1,29 @@
 import { calculatePreparation, formatWeight, type Preparation } from './explore-model'
 
+export function ExplorePreview({ values }: { values: Preparation }) {
+  const result = calculatePreparation(values)
+  const largest = Math.max(result.gross, result.liquid, result.cooked)
+  const stages = [
+    { label: 'Comprado · PB', weight: result.gross, className: 'gross' },
+    { label: 'Limpo · PL', weight: result.liquid, className: 'liquid' },
+    { label: 'Após preparo', weight: result.cooked, className: 'cooked' },
+  ]
+  return (
+    <div className="explore-preview" role="group" aria-label="Comparação dos pesos em tempo real">
+      <p>Veja o peso mudar</p>
+      <div className="explore-preview-stages">
+        {stages.map(stage => <div className={`explore-preview-stage ${stage.className}`} key={stage.className}>
+          <span>{stage.label}</span>
+          <strong>{formatWeight(stage.weight)} <small>kg</small></strong>
+          <div className="explore-preview-track" aria-hidden="true">
+            <div style={{ width: `${stage.weight / largest * 100}%` }} />
+          </div>
+        </div>)}
+      </div>
+    </div>
+  )
+}
+
 export function ExploreDiagram({ values }: { values: Preparation }) {
   const result = calculatePreparation(values)
   const largest = Math.max(result.gross, result.liquid, result.cooked)
