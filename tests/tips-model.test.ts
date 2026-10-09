@@ -13,7 +13,7 @@ test('search ignores accents, case and excess spaces and requires every term', (
 test('search includes formulas, examples and cautions and removes empty groups', () => {
   assert.ok(filterTips('1,10').some(tip => tip.id === 'compra-uan'))
   assert.ok(filterTips('numerador').some(tip => tip.id === 'indice-de-conversao'))
-  assert.equal(filterTips('').length, 11)
+  assert.equal(filterTips('').length, 21)
   assert.deepEqual(groupTips('inexistente'), [])
   assert.equal(groupTips('reidratacao').length, 1)
 })
@@ -22,8 +22,9 @@ test('direct navigation accepts the tips page and only existing section anchors'
   assert.equal(pageFromSearch('?pagina=dicas&outro=1'), 'dicas')
   assert.equal(pageFromSearch('?pagina=inexistente'), 'configuration')
   assert.equal(validTipAnchor('#planejamento'), 'planejamento')
-  assert.equal(validTipAnchor('#fontes'), 'fontes')
+  assert.equal(validTipAnchor('#fontes'), null)
   assert.equal(validTipAnchor('#inexistente'), null)
+  assert.equal(validTipAnchor('#sensorial'), null)
 })
 
 test('every tip has a unique identifier and references an existing source', () => {

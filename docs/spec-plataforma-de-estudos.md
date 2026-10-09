@@ -73,13 +73,15 @@ Categorias, unidades ou assuntos da matéria. Os nomes das categorias pertencem 
 
 **Objetivo:** permitir que o aluno consulte as perguntas e escolha livremente o que praticar.
 
-**Composição:** título, descrição curta, filtro de categoria, filtro de tipo, lista agrupada por categoria e ação “Montar teste”.
+**Composição:** título, descrição curta, filtros de categoria, tipo e origem,
+lista agrupada por categoria e ação “Montar teste”.
 
 Cada grupo mostra nome e quantidade de perguntas. Cada item é clicável e apresenta enunciado, tipo e identificação de origem, quando existente, como número de simulado ou item de roteiro.
 
 **Comportamento:**
 
-- Os dois filtros têm opção “Todos” e aceitam uma escolha por filtro nesta tela.
+- Os filtros têm opção “Todos” e aceitam uma escolha por filtro nesta tela.
+- Origem distingue adaptações da lista da professora de questões autorais.
 - Combinar filtros restringe a lista e atualiza os grupos exibidos.
 - Não exibir grupos vazios; se a lista inteira estiver vazia, mostrar mensagem explícita.
 - Selecionar uma pergunta abre a prática livre naquela questão.
@@ -228,6 +230,13 @@ Versionar os dados e recuperar sessões após mudanças no banco. Remover pergun
 
 Separar conteúdo da lógica de navegação, prática, correção e persistência.
 
+O banco atual inclui adaptações da lista da professora e questões autorais
+conferidas nos slides. As referências indicam item, página ou seção. As erratas
+encontradas na lista e na apostila são sinalizadas nas explicações e em Dicas.
+O registro de validação está em `docs/validacao-conteudo-2026-10-09.md`.
+Análise sensorial tem categoria própria. Não tratar índices ou composição de
+exercícios específicos como valores universais de alimentos.
+
 | Entidade                                            | Dados principais                                                                           |
 | --------------------------------------------------- | ------------------------------------------------------------------------------------------ |
 | Configuração da matéria, proposta para reutilização | Nome, marca, categorias, rótulos e módulos disponíveis                                     |
@@ -291,3 +300,34 @@ Não fazem parte da experiência atual: conta de usuário, sincronização entre
 14. O acesso direto a Dicas e suas âncoras continua funcionando após recarregar.
 15. Em telas pequenas, enunciado, materiais e ações continuam legíveis e utilizáveis.
 16. Se o módulo interativo for incluído, seu carregamento e falha são comunicados e há ação para tentar novamente.
+
+### Recorte atual da ficha técnica
+
+Nesta versão, mostrar apenas a teoria: objetivos, estrutura, padronização e uso.
+Ocultar questões e dicas de preenchimento, cálculos de composição e energia
+da ficha técnica em todos os fluxos de estudo. Preservar o catálogo e o histórico
+das questões ocultas para eventual reativação.
+
+### Recorte atual de assuntos da prova
+
+Ocultar Análise sensorial das questões, dicas e seletores de assuntos.
+Preservar seu catálogo e histórico para eventual reativação. Os assuntos ativos
+são objetivos da Técnica Dietética, pesos e medidas, técnicas básicas de cozinha,
+indicadores de qualidade no pré-preparo e preparo, métodos de cocção e ficha
+técnica somente teórica.
+
+### Fontes e referências na interface
+
+Remover a seção de materiais e fontes, os links de referência nas dicas,
+as referências das questões e correções e as fontes do simulador.
+Manter os metadados no catálogo para validação interna do conteúdo.
+
+### Dica e revisão por memorização
+
+Cada questão oferece um botão de dica antes da confirmação. Nos cálculos,
+mostrar as equações básicas de FC, IC, IR/IER, perdas, per capita, porção,
+rendimento, quantidade adquirida e custo real, sem resolver o exercício.
+Usar a dica marca a questão como “Não decorada”. O acerto vale na nota,
+mas a questão permanece na revisão até um acerto posterior sem dica.
+Persistir o uso da dica na sessão, na tentativa e no histórico; incluí-lo
+nos filtros e contadores de revisão. A lateral explica esse funcionamento.

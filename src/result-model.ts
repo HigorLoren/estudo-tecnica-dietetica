@@ -1,5 +1,5 @@
 import type { Configuration } from './configuration-screen'
-import type { Attempt, Session } from './practice-model'
+import { needsReview, type Attempt, type Session } from './practice-model.ts'
 import type { Question } from './questions'
 
 export function getTestResult(session: Session) {
@@ -10,7 +10,7 @@ export function getTestResult(session: Session) {
     return { question, attempt, points: attempt.result === 'correct' ? pointsPerQuestion : 0 }
   })
   const correct = rows.filter(row => row.attempt.result === 'correct').length
-  return { total, correct, pending: total - correct,
+  return { total, correct, pending: rows.filter(row => needsReview(row.attempt)).length,
     pointsPerQuestion, score: correct * pointsPerQuestion, rows }
 }
 
@@ -25,7 +25,7 @@ export function displayStudentAnswer(question: Question, attempt: Attempt) {
 }
 
 export function createReviewConfiguration(session: Session): Configuration {
-  const pending = getTestResult(session).rows.filter(row => row.attempt.result !== 'correct')
+  const pending = getTestResult(session).rows.filter(row => needsReview(row.attempt))
   return {
     mode: 'review', selected: [...new Set(pending.map(row => row.question.subject))],
     types: [...new Set(pending.map(row => row.question.type))],

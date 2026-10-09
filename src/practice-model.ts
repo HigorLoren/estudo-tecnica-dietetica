@@ -1,14 +1,17 @@
 import type { Question } from './questions'
 
 export type Result = 'correct' | 'incorrect' | 'incomplete' | 'unknown'
-export type Attempt = { answer: string; result: Result }
-export type History = Record<string, { attempts: number; errors: number; lastCorrect: boolean }>
+export type Attempt = { answer: string; result: Result; usedHint?: boolean }
+export type History = Record<string, {
+  attempts: number; errors: number; lastCorrect: boolean; usedHint?: boolean;
+}>
 export type Session = {
   questions: Question[]
   index: number
   answers: Record<string, Attempt>
   draft: string
   completed: boolean
+  hintedIds?: string[]
 }
 
 export function normalizeAnswer(value: string) {
@@ -36,14 +39,17 @@ export function gradeAnswer(question: Question, value: string): Result {
   return 'incorrect'
 }
 
-export function recordAttempt(history: History, id: string, result: Result): History {
+export function recordAttempt(
+  history: History, id: string, result: Result, usedHint = false,
+): History {
   const previous = history[id] ?? { attempts: 0, errors: 0, lastCorrect: false }
   return {
     ...history,
     [id]: {
       attempts: previous.attempts + 1,
       errors: previous.errors + (result === 'correct' ? 0 : 1),
-      lastCorrect: result === 'correct',
+      lastCorrect: result === 'correct' && !usedHint,
+      ...(usedHint ? { usedHint: true } : {}),
     },
   }
 }
@@ -84,7 +90,19 @@ export function confirmSession(session: Session, unknown = false) {
   const result = unknown ? 'unknown' : gradeAnswer(question, session.draft)
   const answer = unknown ? 'Não sei' : session.draft
   return {
-    id: question.id, result,
-    session: { ...session, answers: { ...session.answers, [question.id]: { answer, result } } },
+    id: question.id, result, usedHint: session.hintedIds?.includes(question.id) ?? false,
+    session: { ...session, answers: { ...session.answers, [question.id]: { answer, result,
+      ...(session.hintedIds?.includes(question.id) ? { usedHint: true } : {}) } } },
   }
+}
+
+export function revealQuestionHint(session: Session | null) {
+  if (!session || session.completed) return null
+  const id = session.questions[session.index].id
+  if (session.answers[id] || session.hintedIds?.includes(id)) return null
+  return { ...session, hintedIds: [...(session.hintedIds ?? []), id] }
+}
+
+export function needsReview(attempt: Attempt) {
+  return attempt.result !== 'correct' || attempt.usedHint === true
 }

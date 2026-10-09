@@ -85,3 +85,15 @@ test('all-correct result reaches four points and missing attempts safely receive
   assert.equal(empty.score, 0)
   assert.equal(empty.pointsPerQuestion, 0)
 })
+
+test('hint-assisted correct answers earn points and appear in the review configuration', () => {
+  const session = createSession([byId('fc-calculo')])
+  session.answers['fc-calculo'] = { answer: '1,20', result: 'correct', usedHint: true }
+  const result = getTestResult(session)
+  assert.equal(result.correct, 1)
+  assert.equal(result.score, 4)
+  assert.equal(result.pending, 1)
+  assert.deepEqual(createReviewConfiguration(session), {
+    mode: 'review', selected: ['indicadores'], types: [2], quantity: 1,
+  })
+})

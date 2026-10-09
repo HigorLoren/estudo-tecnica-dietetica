@@ -82,12 +82,11 @@ export function ExploreScreen({ onPractice, onTips }: {
           <p><strong>FC = PB ÷ PL.</strong> Compara o alimento comprado com o alimento limpo.
             <br /><strong>IC = peso cozido ÷ PL cru.</strong> Compara o resultado do preparo
             com o alimento limpo, antes da cocção.</p>
-          <p className="explore-source">Fontes: aula 6, parte 1, 14:48–20:18;
-            aula 5, parte 2, 01:01–08:20 e 12:26–21:04.</p></div>
+        </div>
         <div className="explore-actions">
           <button className="primary-button" onClick={onPractice}>Praticar indicadores
             <Icon name="arrow" size={18} /></button>
-          <button className="outline-button" onClick={onTips}>Consultar dicas e fontes</button>
+          <button className="outline-button" onClick={onTips}>Consultar dicas</button>
         </div>
       </section>
     </main>

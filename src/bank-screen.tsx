@@ -14,12 +14,11 @@ function QuestionItem({ question, history, onOpen }: {
         <strong>{question.topic}</strong>
         <span className="bank-question-prompt">{question.prompt}</span>
         <span className="bank-question-meta">{formats[question.type]}
-          <span>{question.source.split(' · ').slice(0, 2).join(' · ')}</span>
         </span>
       </span>
       <span className="bank-question-end">
         {previous && <span className={`history-badge ${previous.lastCorrect ? 'correct' : ''}`}>
-          {previous.lastCorrect ? 'Praticada' : 'Revisar'}
+          {previous.usedHint ? 'Não decorada' : previous.lastCorrect ? 'Praticada' : 'Revisar'}
         </span>}
         <Icon name="arrow" size={18} />
       </span>
@@ -59,6 +58,14 @@ export function BankScreen({ filters, onFilter, history, onOpen, onBack }: {
             onChange={event => onFilter({ ...filters, type: event.currentTarget.value })}>
             <option value="all">Todos os tipos</option>
             {formats.map((format, index) => <option value={index} key={format}>{format}</option>)}
+          </select>
+        </div>
+        <div><label htmlFor="bank-origin">Origem</label>
+          <select id="bank-origin" value={filters.origin ?? 'all'}
+            onChange={event => onFilter({ ...filters, origin: event.currentTarget.value })}>
+            <option value="all">Todas as origens</option>
+            <option value="professora">Lista da professora</option>
+            <option value="autoral">Questões autorais</option>
           </select>
         </div>
         <p role="status" aria-live="polite"><strong>{filtered.length}</strong>

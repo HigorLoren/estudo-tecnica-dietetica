@@ -17,8 +17,7 @@ export function Header({ onNotice, onHome, onTips, onExplore, activeMode }: {
       <div className="header-inner">
         <a className="brand" href="./" aria-label="Técnica Dietética, início"
           onClick={event => { event.preventDefault(); onHome() }}>
-          <span className="brand-mark"><Icon name="leaf" size={26} /></span>
-          <span>Técnica Dietética<small>Seu espaço de estudo</small></span>
+          Técnica Dietética
         </a>
         <nav aria-label="Modos de estudo">
           {modes.map((item, index) => (

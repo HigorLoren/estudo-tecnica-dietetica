@@ -1,3 +1,4 @@
+import { CalculationExplanation } from './calculation-explanation'
 import { useEffect, useRef } from 'preact/hooks'
 import { isAnswerReady, type Attempt, type Session } from './practice-model'
 import type { Question } from './questions'
@@ -5,6 +6,7 @@ import { formats, subjects } from './study-data'
 import { Icon } from './icons'
 import { PracticeActions, PracticeNavigation, PracticeProgress } from './practice-navigation'
 import { ResultScreen } from './result-screen'
+import { QuestionHint } from './question-hint'
 
 const feedbackLabels = {
   correct: 'Resposta correta', incorrect: 'Ainda não foi dessa vez',
@@ -58,24 +60,24 @@ function Feedback({ question, attempt }: { question: Question; attempt: Attempt 
         <span className="feedback-symbol">{attempt.result === 'correct' ? '✓' : '!'}</span>
         <h2>{feedbackLabels[attempt.result]}</h2>
       </div>
+      {attempt.usedHint && <p className="hint-review-note"><strong>Não decorada.</strong>
+        Você usou a dica; esta questão fica na revisão até um acerto sem dica.</p>}
       {attempt.result === 'incomplete' && <p>A resposta incompleta não conta como acerto.</p>}
       {attempt.result !== 'correct' && <p className="correct-answer">
         Resposta esperada: <strong>{question.answer}</strong>
       </p>}
-      {question.formula && <div className="worked-formula">{question.formula}</div>}
+      <CalculationExplanation question={question} />
       <p>{question.explanation}</p>
       <div className="learning-note"><Icon name="bulb" size={18} />
         <p>{question.caution}</p>
       </div>
-      <details className="question-source"><summary>Conteúdo e origem da questão</summary>
-        <p>{question.source}</p>
-      </details>
     </section>
   )
 }
 
 type Props = {
   session: Session
+  onHint: () => void
   onDraft: (value: string) => void
   onConfirm: (unknown?: boolean) => void
   onNext: () => void
@@ -115,6 +117,8 @@ export function PracticeScreen(props: Props) {
           </p>
           <h1 ref={heading} tabIndex={-1}>{question.topic}</h1>
           <p className="question-prompt">{question.prompt}</p>
+          <QuestionHint question={question} used={session.hintedIds?.includes(question.id) ?? false}
+            confirmed={!!attempt} onHint={props.onHint} />
           <form onSubmit={event => { event.preventDefault(); if (!attempt) onConfirm() }}>
             <AnswerField question={question} value={value} disabled={!!attempt}
               onChange={onDraft} />
@@ -125,12 +129,14 @@ export function PracticeScreen(props: Props) {
         </section>
         <aside className="practice-aside">
           <div className="study-reminder"><span className="reminder-icon">
-            <Icon name="bulb" size={23} /></span><h2>Faça no seu ritmo.</h2>
-            <p>Leia o enunciado, organize as informações e só então responda.</p>
-            <hr /><h3>Nos cálculos</h3>
-            <p>Confira as unidades e a etapa do alimento. Você pode usar uma calculadora.</p>
-            <h3>Ficou em dúvida?</h3>
-            <p>Use “Não sei” para conhecer a resposta e entender o raciocínio.</p>
+            <Icon name="bulb" size={23} /></span><h2>Como funciona a dica</h2>
+            <p>Use o botão “Dica” quando precisar de ajuda. Nos cálculos, ele mostra as
+              equações básicas dos indicadores para você escolher a que se aplica.</p>
+            <hr /><h3>Não decorada</h3>
+            <p>Ao usar a dica, a questão fica marcada como “Não decorada” e entra na revisão
+              mesmo se você acertar. O acerto continua valendo na nota.</p>
+            <h3>Para sair da revisão</h3>
+            <p>Responda corretamente em uma nova tentativa, sem consultar a dica.</p>
           </div>
           <p className="practice-session-note"><Icon name="clock" size={16} />
             {free ? 'Suas tentativas entram no histórico e ajudam a organizar a revisão.'

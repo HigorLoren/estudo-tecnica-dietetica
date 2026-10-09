@@ -5,12 +5,13 @@ const categories = [
   { id: 'fundamentos', name: 'Fundamentos', detail: 'Objetivos da Técnica Dietética' },
   { id: 'pesos', name: 'Pesos e medidas', detail: 'Pesagem e padronização' },
   { id: 'pre-preparo', name: 'Técnicas de cozinha', detail: 'Operações de pré-preparo' },
+  { id: 'sensorial', name: 'Análise sensorial', detail: 'Sentidos, gostos e testes sensoriais' },
   { id: 'indicadores', name: 'Indicadores culinários', detail: 'FC, IC, IER, rendimento e compra' },
   { id: 'coccao', name: 'Métodos de cocção', detail: 'Preparo e transferência de calor' },
-  { id: 'ficha', name: 'Ficha técnica', detail: 'Ingredientes e pesos na receita' },
+  { id: 'ficha', name: 'Ficha técnica', detail: 'Objetivos, estrutura e padronização' },
 ]
 
-export const subjects = categories.map(category => ({
+export const subjects = categories.filter(category => category.id !== 'sensorial').map(category => ({
   ...category,
   counts: [0, 1, 2].map(type => questions.filter(
     question => question.subject === category.id && question.type === type,
@@ -33,9 +34,11 @@ export function getAvailability(
   return getEligibleQuestions(selected, types, review, history).length
 }
 
-export type BankFilters = { subject: string; type: string }
+export type BankFilters = { subject: string; type: string; origin?: string }
 export function filterBankQuestions(filters: BankFilters) {
   return questions.filter(question => (filters.subject === 'all'
     || question.subject === filters.subject) && (filters.type === 'all'
-    || question.type === Number(filters.type)))
+    || question.type === Number(filters.type)) && (!filters.origin || filters.origin === 'all'
+      || (filters.origin === 'professora' ? question.origin === 'professora'
+        : question.origin !== 'professora')))
 }

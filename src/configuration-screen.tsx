@@ -1,3 +1,4 @@
+import { questions } from './questions'
 import { Icon } from './icons'
 import { FormatSelector, ModeSelector, SubjectSelector, TestSummary } from './configuration-controls'
 import { getAvailability, totalQuestions } from './study-data'
@@ -21,7 +22,7 @@ function ResumeBanner({ session, onResume }: { session: Session; onResume: () =>
   return (
     <section className="resume-banner" aria-label="Teste em andamento">
       <span className="resume-icon"><Icon name="clock" size={23} /></span>
-      <div className="resume-copy"><strong>Vamos continuar de onde você parou?</strong>
+      <div className="resume-copy"><strong>Teste em andamento</strong>
         <p>{answered} de {session.questions.length} questões respondidas</p>
       </div>
       <div className="resume-progress" aria-label={`${Math.round(percent)}% respondido`}>
@@ -37,16 +38,17 @@ function ResumeBanner({ session, onResume }: { session: Session; onResume: () =>
 export function ConfigurationScreen(props: Props) {
   const { config, onChange, history, session, onStart, onResume, onOpenBank } = props
   const available = getAvailability(config.selected, config.types, config.mode === 'review', history)
-  const practiced = Object.keys(history).length
-  const pending = Object.values(history).filter(item => !item.lastCorrect).length
+  const visibleHistory = questions.flatMap(question =>
+    history[question.id] ? [history[question.id]] : [])
+  const practiced = visibleHistory.length
+  const pending = visibleHistory.filter(item => !item.lastCorrect).length
   return (
     <main className="page-container">
-      <div className="page-intro">
-        <div><span className="intro-label"><span />Um pouco de prática, todos os dias</span>
-          <h1>Seu próximo passo começa aqui.</h1>
-          <p>Escolha os assuntos, ajuste o ritmo e transforme conteúdo em conhecimento.</p>
+      <div className="page-intro configuration-intro">
+        <div>
+          <h1>Escolha os assuntos e monte seu teste.</h1>
+          <p>Defina os tipos de questão e a quantidade que quer responder.</p>
         </div>
-        <span className="prototype-label">Banco inicial · conteúdo da P1</span>
       </div>
       {session && !session.completed && <ResumeBanner session={session} onResume={onResume} />}
       <div className="study-layout">
@@ -72,14 +74,11 @@ export function ConfigurationScreen(props: Props) {
         </aside>
       </div>
       <section className="question-bank">
-        <span className="bank-icon"><Icon name="layers" size={25} /></span>
-        <div><h2>Um primeiro banco para a sua prova</h2>
-          <p>{totalQuestions} questões, com foco em FC, IC, rendimento e cálculos de compra.</p>
+        <div><h2>Banco de questões</h2>
+          <p>{totalQuestions} questões dos assuntos da P1, incluindo exercícios da professora.</p>
         </div>
         <button className="text-button bank-button" onClick={onOpenBank}>Abrir banco de questões<Icon name="arrow" size={18} /></button>
       </section>
-      <footer className="page-footer"><span>Técnica Dietética</span>
-        <p>Um espaço para aprender no seu ritmo.</p><span>Sem cadastro. Só estudo.</span></footer>
     </main>
   )
 }

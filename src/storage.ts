@@ -1,4 +1,4 @@
-import { questions, type Question } from './questions.ts'
+import { questions, questionCatalog, type Question } from './questions.ts'
 import { subjects } from './study-data.ts'
 import type { Configuration } from './configuration-screen'
 import type { Attempt, History, Session } from './practice-model'
@@ -43,13 +43,15 @@ function restoreConfig(value: unknown): Configuration {
 
 function restoreHistory(value: unknown, changed: Set<string>): History {
   const history = object(value)
-  const entries = questions.filter(question => !changed.has(question.id)).flatMap(question => {
+  const unchanged = questionCatalog.filter(question => !changed.has(question.id))
+  const entries = unchanged.flatMap(question => {
     const item = object(history[question.id])
     const valid = Number.isSafeInteger(item.attempts) && (item.attempts as number) > 0
       && Number.isSafeInteger(item.errors) && (item.errors as number) >= 0
       && (item.errors as number) <= (item.attempts as number)
       && typeof item.lastCorrect === 'boolean'
-    return valid ? [[question.id, item]] : []
+    return valid ? [[question.id, { ...item,
+      ...(item.usedHint === true ? { lastCorrect: false, usedHint: true } : {}) }]] : []
   })
   return Object.fromEntries(entries) as History
 }
@@ -71,6 +73,13 @@ function restoreOptions(question: Question, value: unknown): Question {
   return valid ? { ...question, options: value } : question
 }
 
+function restoreHints(value: unknown, ids: string[], changed: Set<string>) {
+  if (!Array.isArray(value)) return {}
+  const hintedIds = [...new Set(value.filter((id): id is string =>
+    typeof id === 'string' && ids.includes(id) && !changed.has(id)))]
+  return hintedIds.length ? { hintedIds } : {}
+}
+
 function restoreSession(value: unknown, changed: Set<string>): Session | null {
   const saved = object(value)
   if (!Array.isArray(saved.ids)) return null
@@ -89,7 +98,7 @@ function restoreSession(value: unknown, changed: Set<string>): Session | null {
   return {
     questions: ids.map(id => restoreOptions(questions.find(question => question.id === id)!,
       options[id])),
-    index, answers,
+    index, answers, ...restoreHints(saved.hintedIds, ids, changed),
     draft: !changed.has(ids[index]) && currentId === ids[index] && typeof saved.draft === 'string'
       ? saved.draft : '',
     completed: false,
@@ -100,10 +109,11 @@ export function serializeProgress(progress: Progress) {
   const session = progress.session?.completed ? null : progress.session
   return JSON.stringify({
     version: 1, config: progress.config, history: progress.history,
-    signatures: Object.fromEntries(questions.map(question => [question.id, signature(question)])),
+    signatures: Object.fromEntries(questionCatalog.map(question =>
+      [question.id, signature(question)])),
     session: session ? {
       ids: session.questions.map(question => question.id), index: session.index,
-      answers: session.answers, draft: session.draft,
+      answers: session.answers, draft: session.draft, hintedIds: session.hintedIds,
       options: Object.fromEntries(session.questions.map(question =>
         [question.id, question.options])),
     } : null,
@@ -114,7 +124,7 @@ export function recoverProgress(raw: string): Recovery {
   const data = object(JSON.parse(raw))
   if (data.version !== 1) throw new Error('Unsupported version')
   const signatures = object(data.signatures)
-  const changed = new Set(questions.filter(question =>
+  const changed = new Set(questionCatalog.filter(question =>
     signatures[question.id] !== signature(question)).map(question => question.id))
   const saved = object(data.session)
   const removed = Array.isArray(saved.ids) && saved.ids.some(id =>

@@ -1,3 +1,5 @@
+import { reviewTips } from './review-tips.ts'
+
 export type Tip = {
   id: string
   group: string
@@ -10,20 +12,36 @@ export type Tip = {
   sources: { id: string; passage: string }[]
 }
 
-export const tipGroups = [
+const tipGroupCatalog = [
+  { id: 'fundamentos', title: 'Fundamentos', description: 'Objetivos da disciplina e decisões no preparo.' },
   { id: 'indicadores', title: 'Indicadores culinários', description: 'O que cada índice mede e como calcular.' },
   { id: 'planejamento', title: 'Planejamento de UAN', description: 'Da quantidade individual à compra e ao custo.' },
   { id: 'calculos', title: 'Leitura dos cálculos', description: 'Etapas, unidades e resultados que fazem sentido.' },
   { id: 'preparo', title: 'Técnicas de preparo', description: 'Consulta rápida aos conceitos básicos da disciplina.' },
+  { id: 'sensorial', title: 'Análise sensorial', description: 'Sentidos, gostos, aceitação e testes.' },
+  { id: 'ficha', title: 'Ficha técnica', description: 'Objetivos, estrutura e uso da ficha técnica.' },
 ]
 
-export const tipSources = [
+export const tipGroups = tipGroupCatalog.filter(group => group.id !== 'sensorial')
+
+type TipSource = { id: string; title: string; description: string; file?: string; url?: string }
+export const tipSources: TipSource[] = [
   { id: 'aula-05', title: 'Aula 5 · 04/09/2026', description: 'Transcrição revisada, parte 2. Indicadores de conversão, reidratação, per capita e porção.', file: 'docs/lecture-transcriptions/2026-09-04_tecnica-dietetica_aula-05_parte-2_iphone13-revisado.txt' },
   { id: 'aula-06-1', title: 'Aula 6 · 11/09/2026 · parte 1', description: 'Transcrição revisada, subparte 1. Fator de correção, conversão, reidratação e quantidades individuais.', file: 'docs/lecture-transcriptions/2026-09-11_tecnica-dietetica_aula-06_parte-1_subparte-1-revisado.txt' },
   { id: 'aula-06-2', title: 'Aula 6 · 11/09/2026 · parte 2', description: 'Transcrição revisada, subparte 2. Compra, margem de segurança, custo real e resolução de exercícios.', file: 'docs/lecture-transcriptions/2026-09-11_tecnica-dietetica_aula-06_parte-1_subparte-2-revisado.txt' },
   { id: 'notas-pesos', title: 'Anotações · Pesos e medidas', description: 'Aula 2. Pesagem, tara e técnicas de mensuração.', file: 'Aulas/Aula 2 - Pesos e Medidas.md' },
   { id: 'notas-tecnicas', title: 'Anotações · Técnicas básicas de cozinha', description: 'Aula 3. Operações de pré-preparo e organização de ingredientes e utensílios.', file: 'Aulas/Aula 3 - Técnicas Básicas de Cozinha.md' },
   { id: 'notas-coccao', title: 'Anotações · Métodos de cocção', description: 'Aula 6. Transferência de calor por condução e convecção.', file: 'Aulas/Aula 6 - Métodos de Cocção, Formas de Transferência de Claro e Valor Nutricional.md' },
+  { id: 'lista-professora', title: 'Lista da professora · 2026', description: 'Exercícios com gabarito. Cálculos recalculados e erros de impressão sinalizados nos tópicos e questões. Há números de itens repetidos; confira também a página.', url: '/materiais/lista-exercicios-gabarito-2026.pdf' },
+  { id: 'slides-1', title: 'Slides · Aula 1: Arte Culinária', description: 'Material da professora. Definição e sete objetivos da Técnica Dietética.', file: 'Aula 1 - Arte Culinária.pdf' },
+  { id: 'slides-2', title: 'Slides · Aula 2: Pesos e Medidas', description: 'Material da professora. Mensuração de secos, líquidos, pastosos e densidade.', file: 'Aula 2 - Pesos e Medidas.pdf' },
+  { id: 'slides-3', title: 'Slides · Aula 3: Técnicas básicas de cozinha', description: 'Material da professora. Divisão, separação, união e cortes técnicos.', file: 'Aula 3 - Técnicas básicas de cozinha.pdf' },
+  { id: 'slides-4', title: 'Slides · Aula 4: Análise sensorial', description: 'Material da professora. Sentidos, gostos e testes. O mapa com regiões exclusivas da língua não foi adotado.', file: 'Aula 4 - Análise sensorial_graduação 2026.pdf' },
+  { id: 'slides-6', title: 'Slides · Aula 6: Métodos de cocção', description: 'Material da professora. Meios de cocção, transferência de calor e branqueamento. A distinção entre Maillard e caramelização foi revisada.', file: 'Aula 6 - Métodos de cocção de alimentos_2026_graduação.pdf' },
+  { id: 'slides-ficha', title: 'Slides · Ficha Técnica de Preparo', description: 'Material da professora. Objetivos, estrutura e vantagens de uso.', file: 'Aula 5 - Ficha Técnica de Preparo de Alimentos_2026_graduação.pdf' },
+  { id: 'exploratorium', title: 'Exploratorium · Science of Cooking', description: 'Referência complementar para distinguir Maillard e caramelização.', url: 'https://annex.exploratorium.edu/cooking/candy/caramels-story.html' },
+  { id: 'usda', title: 'USDA · FoodData Central', description: 'Documentação dos fatores energéticos gerais de Atwater e das definições de carboidratos e fibras.', url: 'https://fdc.nal.usda.gov/Foundation_Foods_Documentation/' },
+  { id: 'nidcd', title: 'NIH/NIDCD · Percepção do gosto', description: 'Referência complementar: os receptores dos gostos não ficam em regiões exclusivas da língua.', url: 'https://www.nidcd.nih.gov/health/taste-disorders' },
 ]
 
 export const tips: Tip[] = [
@@ -49,7 +67,7 @@ export const tips: Tip[] = [
   },
   {
     id: 'reidratacao', group: 'indicadores', title: 'Reidratação: pese o alimento escorrido',
-    concept: 'O indicador de reidratação (IER, também referido como IR) mede a mudança de peso na hidratação de grãos, leguminosas e algumas farinhas, antes da cocção.',
+    concept: 'O indicador de reidratação (IR nos slides, também referido como IER) mede a mudança de peso na hidratação de grãos, leguminosas e algumas farinhas, antes da cocção.',
     formula: 'IER = peso hidratado escorrido ÷ peso seco',
     example: '500 g de feijão seco passam a 1.000 g depois do molho e da drenagem: IER = 1.000 ÷ 500 = 2,00.',
     memory: 'Hidratado em cima, seco embaixo. Compare o mesmo alimento nos dois momentos.',
@@ -125,4 +143,6 @@ export const tips: Tip[] = [
     caution: 'Um preparo pode combinar mecanismos. Identifique o fenômeno que o enunciado descreve, em vez de atribuir apenas um mecanismo à preparação inteira.',
     sources: [{ id: 'notas-coccao', passage: 'Transferência de calor' }],
   },
+  ...reviewTips.filter(tip => tip.group !== 'sensorial'
+    && !['energia-da-receita', 'cortes-tecnicos'].includes(tip.id)),
 ]

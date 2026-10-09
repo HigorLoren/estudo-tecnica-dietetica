@@ -3,8 +3,8 @@ import { test } from 'node:test'
 import {
   defaultProgress, loadProgress, recoverProgress, saveProgress, serializeProgress, STORAGE_KEY,
 } from '../src/storage.ts'
-import { createSession, recordAttempt } from '../src/practice-model.ts'
-import { questions } from '../src/questions.ts'
+import { createSession, recordAttempt, revealQuestionHint, confirmSession } from '../src/practice-model.ts'
+import { questions, questionCatalog } from '../src/questions.ts'
 import { filterBankQuestions } from '../src/study-data.ts'
 
 function sampleProgress() {
@@ -125,7 +125,58 @@ test('storage failures are reported and usable state remains in memory', () => {
 test('bank combines filters and finds an empty selection without altering the full bank', () => {
   assert.equal(filterBankQuestions({ subject: 'all', type: 'all' }).length, questions.length)
   const numeric = filterBankQuestions({ subject: 'indicadores', type: '2' })
-  assert.equal(numeric.length, 10)
+  assert.equal(numeric.length, 32)
   assert.ok(numeric.every(question => question.type === 2 && question.subject === 'indicadores'))
   assert.equal(filterBankQuestions({ subject: 'fundamentos', type: '2' }).length, 0)
+})
+
+test('hidden worksheet questions leave resumed sessions without losing their history', () => {
+  const progress = sampleProgress()
+  const hidden = questionCatalog.find(question => question.id === 'lista-25-alho')!
+  progress.session!.questions.unshift(hidden)
+  progress.session!.index += 1
+  progress.history = recordAttempt(progress.history, hidden.id, 'incorrect')
+  const restored = recoverProgress(serializeProgress(progress)).progress
+  assert.ok(!restored.session!.questions.some(question => question.id === hidden.id))
+  assert.deepEqual(restored.history[hidden.id], progress.history[hidden.id])
+  assert.equal(restored.session!.draft, progress.session!.draft)
+})
+
+test('hidden sensory questions retain history and leave resumed sessions and selections', () => {
+  const progress = sampleProgress()
+  const hidden = questionCatalog.find(question => question.subject === 'sensorial')!
+  progress.config.selected.push('sensorial')
+  progress.session!.questions.push(hidden)
+  progress.history = recordAttempt(progress.history, hidden.id, 'incorrect')
+  const restored = recoverProgress(serializeProgress(progress)).progress
+  assert.ok(!restored.config.selected.includes('sensorial'))
+  assert.ok(!restored.session!.questions.some(question => question.id === hidden.id))
+  assert.deepEqual(restored.history[hidden.id], progress.history[hidden.id])
+})
+
+test('hint usage survives reload both before and after confirming a correct answer', () => {
+  const progress = sampleProgress()
+  progress.session = revealQuestionHint(createSession([
+    questions.find(question => question.id === 'fc-calculo')!,
+  ]))!
+  const resumed = recoverProgress(serializeProgress(progress)).progress
+  assert.deepEqual(resumed.session!.hintedIds, ['fc-calculo'])
+  resumed.session!.draft = '1,20'
+  const confirmed = confirmSession(resumed.session!)!
+  resumed.session = confirmed.session
+  resumed.history = recordAttempt({}, confirmed.id, confirmed.result, confirmed.usedHint)
+  const restored = recoverProgress(serializeProgress(resumed)).progress
+  assert.equal(restored.session!.answers['fc-calculo'].usedHint, true)
+  assert.equal(restored.history['fc-calculo'].lastCorrect, false)
+  assert.equal(restored.history['fc-calculo'].usedHint, true)
+})
+
+test('cut questions are excluded from restored sessions while preserving old history', () => {
+  const progress = sampleProgress()
+  const cut = questionCatalog.find(question => question.id === 'revisao-brunoise')!
+  progress.session!.questions.push(cut)
+  progress.history = recordAttempt(progress.history, cut.id, 'incorrect')
+  const restored = recoverProgress(serializeProgress(progress)).progress
+  assert.ok(!restored.session!.questions.some(question => question.id === cut.id))
+  assert.deepEqual(restored.history[cut.id], progress.history[cut.id])
 })

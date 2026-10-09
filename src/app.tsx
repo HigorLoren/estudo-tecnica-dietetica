@@ -7,7 +7,7 @@ import { BankScreen } from './bank-screen'
 import { getEligibleQuestions, type BankFilters } from './study-data'
 import { questions } from './questions'
 import { confirmSession, createSession, prepareQuestions, recordAttempt,
-  selectQuestions,
+  selectQuestions, revealQuestionHint,
   type Session } from './practice-model'
 import { useProgress } from './use-progress'
 import { createReviewConfiguration } from './result-model'
@@ -57,11 +57,18 @@ export function App() {
     if (free) updateFree(confirmed.session)
     updateProgress(current => ({ ...current,
       session: free ? current.session : confirmed.session,
-      history: recordAttempt(current.history, confirmed.id, confirmed.result) }))
+      history: recordAttempt(current.history, confirmed.id,
+        confirmed.result, confirmed.usedHint) }))
+  }
+  const onHint = () => {
+    const next = revealQuestionHint(free ? freeCurrent.current : getProgress().session)
+    if (!next) return
+    if (free) updateFree(next)
+    else updateProgress(current => ({ ...current, session: next }))
   }
   const onJump = (index: number) => {
     if (!freeSession) return
-    updateFree({ ...freeSession, index, answers: {}, draft: '' })
+    updateFree({ ...freeSession, index, answers: {}, draft: '', hintedIds: [] })
   }
   const onNext = () => {
     if (!active || !active.answers[active.questions[active.index].id]) return
@@ -105,7 +112,8 @@ export function App() {
         onTips={() => setScreen('dicas')}
         onPractice={() => { setFilters({ subject: 'indicadores', type: 'all' }); setScreen('bank') }} />
         : (screen === 'practice' || free) && active ? <PracticeScreen session={active}
-        onDraft={onDraft} onConfirm={onConfirm} onNext={onNext} free={free} onJump={onJump}
+        onDraft={onDraft} onHint={onHint} onConfirm={onConfirm}
+        onNext={onNext} free={free} onJump={onJump}
         onBack={free ? () => setScreen('bank') : onBack} onRestart={onRestart}
         onReview={onReview} onOpenBank={() => setScreen('bank')} />
         : screen === 'bank' ? <BankScreen filters={filters} onFilter={setFilters} history={history}

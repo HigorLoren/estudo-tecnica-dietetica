@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'preact/hooks'
-import { tips, tipSources, type Tip } from './tips-data'
+import { tips, type Tip } from './tips-data'
 import { groupTips, validTipAnchor } from './tips-model'
 import { Icon } from './icons'
 
@@ -9,33 +9,12 @@ function TipCard({ tip }: { tip: Tip }) {
       <h3 id={`tip-${tip.id}`}>{tip.title}</h3>
       <p className="tip-concept">{tip.concept}</p>
       {tip.formula && <div className="tip-formula">{tip.formula}</div>}
-      <div className="tip-example"><h4>Como aplicar</h4><p>{tip.example}</p></div>
+      <div className="tip-example"><h4>{tip.group === 'ficha' ? 'Exemplo de uso' : 'Como aplicar'}</h4><p>{tip.example}</p></div>
       {tip.memory && <div className="tip-memory"><Icon name="bulb" size={18} />
         <div><h4>Macete de memorização</h4><p>{tip.memory}</p>
           <small>Associação para estudar, não uma definição técnica.</small></div></div>}
       <div className="tip-caution"><strong>Atenção</strong><p>{tip.caution}</p></div>
-      <div className="tip-references"><span>Fontes</span>
-        {tip.sources.map(source => <a href={`#fonte-${source.id}`} key={source.id}>
-          {tipSources.find(item => item.id === source.id)?.title} <span>({source.passage})</span>
-        </a>)}
-      </div>
     </article>
-  )
-}
-
-function Sources() {
-  return (
-    <section id="fontes" className="tips-sources" aria-labelledby="sources-title">
-      <h2 id="sources-title">Material e fontes</h2>
-      <p>Conteúdo organizado a partir das transcrições revisadas e das anotações da disciplina.
-        Os exemplos numéricos são aplicações das fórmulas apresentadas nas aulas.</p>
-      <div>{tipSources.map(source => <article id={`fonte-${source.id}`} key={source.id}>
-        <span><Icon name="book" size={18} /></span>
-        <div><h3>{source.title}</h3><p>{source.description}</p></div>
-      </article>)}</div>
-      <p className="tips-sources-note">Os macetes são sugestões de memorização.
-        As fontes sustentam os conceitos e fórmulas; não indicam garantia de cobrança na prova.</p>
-    </section>
   )
 }
 
@@ -102,9 +81,6 @@ export function TipsScreen() {
               onClick={event => { event.preventDefault(); onSelect(group.id) }}>
               <span>{group.title}</span><small>{group.items.length}</small>
             </a>)}
-            <a href="#fontes" aria-current={active === 'fontes' ? 'location' : undefined}
-              onClick={event => { event.preventDefault(); onSelect('fontes') }}>Material e fontes
-              <Icon name="book" size={15} /></a>
           </nav>
           <p>Comece pela dúvida de agora. Depois, volte à prática para fixar o conteúdo.</p>
         </aside>
@@ -120,7 +96,6 @@ export function TipsScreen() {
             <p>Tente outro termo, como “rendimento”, “FC” ou “porção”.</p>
             <button className="outline-button" onClick={clearSearch}>Limpar busca</button>
           </section>}
-          <Sources />
         </div>
       </div>
     </main>

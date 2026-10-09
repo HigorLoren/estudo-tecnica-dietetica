@@ -10,7 +10,7 @@ export function filterTips(query: string, content: Tip[] = tips) {
   return content.filter(tip => {
     const groupTitle = tipGroups.find(group => group.id === tip.group)?.title ?? ''
     const text = normalizeSearch([tip.title, tip.concept, tip.formula, tip.example,
-      tip.memory, tip.caution, groupTitle, ...tip.sources.map(source => source.passage)].join(' '))
+      tip.memory, tip.caution, groupTitle].join(' '))
     return terms.every(term => text.includes(term))
   })
 }
@@ -24,7 +24,7 @@ export function groupTips(query: string) {
 
 export function validTipAnchor(hash: string) {
   const id = hash.replace(/^#/, '')
-  return tipGroups.some(group => group.id === id) || id === 'fontes' ? id : null
+  return tipGroups.some(group => group.id === id) ? id : null
 }
 
 export function pageFromSearch(search: string) {

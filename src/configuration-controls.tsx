@@ -13,14 +13,14 @@ export function ModeSelector({ mode, onChange }: { mode: Mode; onChange: (mode: 
             onChange={() => onChange('test')} />
           <Icon name="book" size={23} />
           <span><strong>Montar um teste</strong>
-            <small>Uma nova seleção para praticar.</small></span>
+            <small>Questões dos assuntos selecionados.</small></span>
         </label>
         <label className={`mode-option ${mode === 'review' ? 'selected' : ''}`}>
           <input type="radio" name="mode" checked={mode === 'review'}
             onChange={() => onChange('review')} />
           <Icon name="repeat" size={23} />
-          <span><strong>Revisar meus erros</strong>
-            <small>Volte ao que precisa de atenção.</small></span>
+          <span><strong>Revisar questões</strong>
+            <small>Erros e questões respondidas com dica.</small></span>
         </label>
       </div>
     </fieldset>
@@ -102,10 +102,14 @@ export function TestSummary({ available, quantity, setQuantity, mode, onStart }:
           onClick={() => setQuantity(Math.min(999, quantity + 1))}>+</button>
       </div>
       <div className="quick-quantities" aria-label="Quantidades sugeridas">
-        {[5, 10, 15, 20].map(count => (
+        {[5, 10, 15, 20].filter(count => count !== available).map(count => (
           <button className={quantity === count ? 'selected' : ''} key={count}
             aria-pressed={quantity === count} onClick={() => setQuantity(count)}>{count}</button>
         ))}
+        <button className={quantity === available ? 'selected' : ''}
+          disabled={!available} aria-label={`Todas as ${available} questões disponíveis`}
+          title="Todas as questões disponíveis" aria-pressed={quantity === available}
+          onClick={() => setQuantity(available)}>{available || 'Todas'}</button>
       </div>
       <div className="summary-details" aria-live="polite" aria-atomic="true">
         <dl>
@@ -115,7 +119,7 @@ export function TestSummary({ available, quantity, setQuantity, mode, onStart }:
           <div className="total-row"><dt>Nota máxima</dt><dd>4,00 <span>pts</span></dd></div>
         </dl>
         {!available && <p className="availability-note">{mode === 'review'
-          ? 'Nenhum erro nesta seleção. Amplie os filtros ou monte um novo teste.'
+          ? 'Nenhuma questão pendente nesta seleção. Amplie os filtros ou monte um novo teste.'
           : 'Selecione ao menos um assunto e um tipo de questão para começar.'}</p>}
         {available > 0 && quantity > available && <p className="availability-note">
           O teste terá {available} {available === 1 ? 'questão disponível' : 'questões disponíveis'},
@@ -126,9 +130,6 @@ export function TestSummary({ available, quantity, setQuantity, mode, onStart }:
         {mode === 'review' ? 'Começar revisão' : 'Começar teste'}<Icon name="arrow" size={18} />
       </button>
       <p className="replacement-note">Se houver um teste em andamento, começar outro o substitui.</p>
-      <div className="summary-footnote"><Icon name="check" size={16} />
-        Cada resposta é uma oportunidade de aprender.
-      </div>
     </section>
   )
 }

@@ -4,6 +4,7 @@ import { questions } from '../src/questions.ts'
 import { getAvailability, getEligibleQuestions, subjects } from '../src/study-data.ts'
 import {
   confirmSession, createSession, gradeAnswer, isAnswerReady, recordAttempt, selectQuestions,
+  revealQuestionHint,
 } from '../src/practice-model.ts'
 
 const byId = (id: string) => questions.find(question => question.id === id)!
@@ -11,9 +12,9 @@ const categoryIds = subjects.map(subject => subject.id)
 
 test('counts and eligibility reflect the real bank and combined filters', () => {
   assert.equal(new Set(questions.map(question => question.id)).size, questions.length)
-  assert.equal(getAvailability(categoryIds, [0, 1, 2], false), 18)
-  assert.equal(getAvailability(['indicadores'], [0, 1, 2], false), 13)
-  assert.equal(getAvailability(['indicadores'], [2], false), 10)
+  assert.equal(getAvailability(categoryIds, [0, 1, 2], false), 58)
+  assert.equal(getAvailability(['indicadores'], [0, 1, 2], false), 36)
+  assert.equal(getAvailability(['indicadores'], [2], false), 32)
   assert.equal(getAvailability([], [0, 1, 2], false), 0)
   assert.equal(getAvailability(categoryIds, [], false), 0)
   assert.equal(getAvailability(categoryIds, [0, 1, 2], true), 0)
@@ -101,4 +102,29 @@ test('confirmation locks an attempt and a repeated confirmation cannot record it
   assert.equal(confirmed.result, 'correct')
   assert.equal(confirmSession(confirmed.session), null)
   assert.equal(confirmSession(confirmed.session, true), null)
+})
+
+test('a correct answer with a hint remains in review until an unaided correct attempt', () => {
+  const session = revealQuestionHint(createSession([byId('fc-calculo')]))!
+  assert.equal(revealQuestionHint(session), null)
+  session.draft = '1,20'
+  const confirmed = confirmSession(session)!
+  assert.equal(confirmed.result, 'correct')
+  assert.equal(confirmed.session.answers['fc-calculo'].usedHint, true)
+  let history = recordAttempt({}, confirmed.id, confirmed.result, confirmed.usedHint)
+  assert.equal(history['fc-calculo'].errors, 0)
+  assert.equal(getAvailability(['indicadores'], [2], true, history), 1)
+  assert.equal(revealQuestionHint(confirmed.session), null)
+  history = recordAttempt(history, confirmed.id, 'correct')
+  assert.equal(getAvailability(['indicadores'], [2], true, history), 0)
+  assert.equal(history['fc-calculo'].usedHint, undefined)
+})
+
+test('hints belong to one question and cannot be opened after completion', () => {
+  const session = revealQuestionHint(createSession([byId('fc-calculo'), byId('ic-calculo')]))!
+  session.index = 1
+  session.draft = '0,75'
+  assert.equal(confirmSession(session)!.usedHint, false)
+  session.completed = true
+  assert.equal(revealQuestionHint(session), null)
 })

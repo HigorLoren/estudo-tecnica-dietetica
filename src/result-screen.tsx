@@ -1,5 +1,6 @@
+import { CalculationExplanation } from './calculation-explanation'
 import { useEffect, useRef, useState } from 'preact/hooks'
-import type { Session } from './practice-model'
+import { needsReview, type Session } from './practice-model'
 import { displayStudentAnswer, formatPoints, getTestResult } from './result-model'
 import { formats } from './study-data'
 import { Icon } from './icons'
@@ -22,7 +23,7 @@ function QuestionCorrection({ row, index, pointsPerQuestion }: {
         <span className="result-question-status">
           <span className={`result-badge ${attempt.result}`}>
             <span aria-hidden="true">{attempt.result === 'correct' ? '✓' : '!'}</span>
-            {resultLabels[attempt.result]}
+            {attempt.usedHint ? 'Não decorada' : resultLabels[attempt.result]}
           </span>
           <span className="result-row-points">{formatPoints(points)} / {formatPoints(pointsPerQuestion)} pts</span>
         </span>
@@ -38,12 +39,13 @@ function QuestionCorrection({ row, index, pointsPerQuestion }: {
         {attempt.result === 'incomplete' && <p className="result-incomplete-note">
           Sua resposta está incompleta e não conta como acerto. Veja o termo completo no gabarito.
         </p>}
+        {attempt.usedHint && <p className="hint-review-note">Você usou a dica.
+          Esta questão fica na revisão até um acerto sem dica.</p>}
         <div className="result-explanation"><h3>Entenda a resposta</h3>
-          {question.formula && <div className="worked-formula">{question.formula}</div>}
+          <CalculationExplanation question={question} />
           <p>{question.explanation}</p>
           <div className="learning-note"><Icon name="bulb" size={18} />
             <p>{question.caution}</p></div>
-          <p className="result-source">{question.source}</p>
         </div>
       </div>
     </details>
@@ -78,7 +80,7 @@ export function ResultScreen({ session, onRestart, onReview, onOpenBank }: {
   const [onlyErrors, setOnlyErrors] = useState(false)
   useEffect(() => { title.current?.focus() }, [])
   const result = getTestResult(session)
-  const visible = result.rows.filter(row => !onlyErrors || row.attempt.result !== 'correct')
+  const visible = result.rows.filter(row => !onlyErrors || needsReview(row.attempt))
   return (
     <main className="page-container result-page">
       <div className="page-intro">
@@ -105,7 +107,7 @@ export function ResultScreen({ session, onRestart, onReview, onOpenBank }: {
         </p>
         <div className="result-question-list">
           {result.rows.map((row, index) => {
-            if (onlyErrors && row.attempt.result === 'correct') return null
+            if (onlyErrors && !needsReview(row.attempt)) return null
             return <QuestionCorrection key={row.question.id} row={row} index={index}
               pointsPerQuestion={result.pointsPerQuestion} />
           })}
@@ -117,7 +119,7 @@ export function ResultScreen({ session, onRestart, onReview, onOpenBank }: {
       </section>
       <div className="result-actions">
         {result.pending > 0 && <button className="primary-button" onClick={onReview}>
-          <Icon name="repeat" size={18} />Revisar meus erros
+          <Icon name="repeat" size={18} />Revisar questões
         </button>}
         <button className={result.pending ? 'outline-button' : 'primary-button'} onClick={onRestart}>
           Montar outro teste<Icon name="arrow" size={18} />
@@ -125,7 +127,7 @@ export function ResultScreen({ session, onRestart, onReview, onOpenBank }: {
         <button className="text-button" onClick={onOpenBank}>Abrir banco de questões</button>
       </div>
       <p className="result-footer-note">Seu histórico de tentativas foi atualizado.
-        As questões não corretas ficam disponíveis na revisão.</p>
+        Erros e questões respondidas com dica ficam disponíveis na revisão.</p>
     </main>
   )
 }
