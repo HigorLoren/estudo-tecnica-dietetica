@@ -23,7 +23,7 @@ export function Header({ onHome, onTips, onExplore, onFormulas, activeMode }: {
               aria-current={activeMode === index ? 'page' : undefined}
               onClick={() => index === 0 ? onHome() : index === 1 ? onExplore()
                 : index === 2 ? onTips() : onFormulas()}>
-              <Icon name={item.icon} size={18} />{item.label}
+              <Icon name={item.icon} size={18} /><span>{item.label}</span>
             </button>
           ))}
         </nav>
