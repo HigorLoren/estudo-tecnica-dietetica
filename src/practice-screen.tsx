@@ -4,6 +4,7 @@ import type { Question } from './questions'
 import { formats, subjects } from './study-data'
 import { Icon } from './icons'
 import { PracticeActions, PracticeNavigation, PracticeProgress } from './practice-navigation'
+import { ResultScreen } from './result-screen'
 
 const feedbackLabels = {
   correct: 'Resposta correta', incorrect: 'Ainda não foi dessa vez',
@@ -73,32 +74,6 @@ function Feedback({ question, attempt }: { question: Question; attempt: Attempt 
   )
 }
 
-function Completion({ session, onBack }: { session: Session; onBack: () => void }) {
-  const title = useRef<HTMLHeadingElement>(null)
-  useEffect(() => { title.current?.focus() }, [])
-  const correct = Object.values(session.answers).filter(item => item.result === 'correct').length
-  const score = (correct * 4 / session.questions.length).toLocaleString('pt-BR', {
-    minimumFractionDigits: 2, maximumFractionDigits: 2,
-  })
-  return (
-    <section className="completion-card">
-      <span className="completion-icon"><Icon name="check" size={30} /></span>
-      <h1 ref={title} tabIndex={-1}>Prática concluída.</h1>
-      <p>{correct === session.questions.length
-        ? 'Você acertou todas as questões. Boa prática!'
-        : 'Cada questão ajuda a reconhecer o que você já sabe e o que precisa retomar.'}</p>
-      <div className="completion-score"><strong>{score}<span> / 4,00 pontos</span></strong>
-        <p>{correct} de {session.questions.length} questões corretas</p></div>
-      <button className="primary-button" onClick={onBack}>
-        Montar outro teste<Icon name="arrow" size={18} />
-      </button>
-      <p className="completion-note">{correct === session.questions.length
-        ? 'Escolha novos assuntos ou formatos para a próxima prática.'
-        : 'As respostas não corretas já estão em “Revisar meus erros”.'}</p>
-    </section>
-  )
-}
-
 type Props = {
   session: Session
   onDraft: (value: string) => void
@@ -106,6 +81,8 @@ type Props = {
   onNext: () => void
   onBack: () => void
   onRestart: () => void
+  onReview: () => void
+  onOpenBank: () => void
   free?: boolean
   onJump?: (index: number) => void
 }
@@ -115,7 +92,8 @@ export function PracticeScreen(props: Props) {
   const heading = useRef<HTMLHeadingElement>(null)
   useEffect(() => { heading.current?.focus() }, [session.index, session.completed])
   if (session.completed) return (
-    <main className="practice-container"><Completion session={session} onBack={onRestart} /></main>
+    <ResultScreen session={session} onRestart={onRestart}
+      onReview={props.onReview} onOpenBank={props.onOpenBank} />
   )
   const question = session.questions[session.index]
   const attempt = session.answers[question.id]

@@ -10,6 +10,7 @@ import { confirmSession, createSession, prepareQuestions, recordAttempt,
   selectQuestions,
   type Session } from './practice-model'
 import { useProgress } from './use-progress'
+import { createReviewConfiguration } from './result-model'
 
 type Screen = 'configuration' | 'practice' | 'bank' | 'free'
 
@@ -72,6 +73,11 @@ export function App() {
     updateProgress(current => ({ ...current, config: { ...current.config, mode: 'test' } }))
     onBack()
   }
+  const onReview = () => {
+    if (!session) return
+    updateProgress(current => ({ ...current, config: createReviewConfiguration(session) }))
+    onBack()
+  }
   return (
     <>
       <Header onNotice={setNotice} onHome={onBack} />
@@ -83,7 +89,8 @@ export function App() {
         <button className="text-button" onClick={dismissRecovery}>Entendi</button></div>}
       {(screen === 'practice' || free) && active ? <PracticeScreen session={active}
         onDraft={onDraft} onConfirm={onConfirm} onNext={onNext} free={free} onJump={onJump}
-        onBack={free ? () => setScreen('bank') : onBack} onRestart={onRestart} />
+        onBack={free ? () => setScreen('bank') : onBack} onRestart={onRestart}
+        onReview={onReview} onOpenBank={() => setScreen('bank')} />
         : screen === 'bank' ? <BankScreen filters={filters} onFilter={setFilters} history={history}
           onOpen={onOpenQuestion} onBack={onBack} />
         : <ConfigurationScreen config={config}
