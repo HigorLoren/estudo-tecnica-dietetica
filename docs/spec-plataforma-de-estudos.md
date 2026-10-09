@@ -6,12 +6,12 @@ A aplicação deve ajudar o estudante a consultar conteúdo, praticar ativamente
 
 ## 2. Conceito do produto
 
-Aplicação web em português, voltada ao estudo individual, com três entradas principais:
+Aplicação web em português, voltada ao estudo individual, com quatro entradas principais:
 
 - **Praticar:** montar testes, revisar erros e acessar perguntas individualmente.
 - **Explorar:** investigar materiais visuais e consultar informações livremente.
 - **Dicas:** encontrar explicações curtas, comparações, macetes e fontes.
-- **Repetição espaçada:** revisar o conteúdo em intervalos de tempo crescentes para combater a curva do esquecimento e fixar a matéria.
+- **Decorar fórmulas:** praticar a recuperação de equações com flashcards, avaliar a facilidade de lembrar e repetir até todos os cartões receberem a nota máxima.
 
 O ciclo principal é: escolher conteúdo → responder → receber correção e explicação → concluir o teste → revisar dificuldades.
 
@@ -26,11 +26,13 @@ O uso atual dispensa cadastro. Configurações, histórico por questão e teste 
 | Questão / prática     | Iniciar teste ou selecionar pergunta no banco       | Responder, conferir, usar “Não sei”, avançar                   |
 | Resultado             | Conclusão de um teste                               | Consultar correções, montar outro teste, abrir banco           |
 | Exploração            | Aba Explorar                                        | Escolher exemplo, ajustar índices, voltar à prática            |
+| Decorar fórmulas      | Aba Decorar fórmulas ou `?pagina=formulas`           | Revelar resposta, avaliar lembrança, retomar ou reiniciar treino |
 | Dicas                 | Aba Dicas ou link direto                            | Buscar, navegar por assuntos, consultar referências            |
 
 O cabeçalho acompanha as telas e contém marca, nome da matéria e navegação por modo. Banco, questão e resultado pertencem ao modo Praticar.
 
-A navegação principal usa estado da aplicação. Dicas tem acesso direto por `?pagina=dicas` e suporte a âncoras de assunto; as demais telas não têm URLs individuais implementadas.
+A navegação principal usa estado da aplicação. Dicas tem acesso direto por `?pagina=dicas` e suporte a âncoras de assunto;
+Decorar fórmulas tem acesso direto por `?pagina=formulas`; as demais telas não têm URLs individuais implementadas.
 
 ## 4. Especificação das telas
 
@@ -189,6 +191,85 @@ O visualizador também é reutilizado em exercícios, com marcadores e alvos pre
 - Carregar imagens sob demanda e oferecer ampliação quando disponível.
 - Exibir fontes junto aos tópicos e distinguir associações de memorização de referências de conteúdo.
 
+### 4.7. Decorar fórmulas
+
+**Objetivo:** lembrar as equações e reconhecer quando usá-las, com um cartão
+por vez e autoavaliação da lembrança. Substitui o modo Repetição espaçada.
+As dicas das questões e seu histórico de revisão permanecem como estão.
+
+O catálogo inicial contém 17 fórmulas de FC, PB/PL, perda absoluta e percentual,
+IC e inversas, IR/IER e inversas, per capita/porção, rendimento, compra,
+margem solicitada de 10% e custo real. Cada fórmula tem seis cartões, totalizando
+102 cartões com IDs e avaliações independentes:
+
+- Completar a fórmula: preencher o termo ausente.
+- Montar a fórmula: arrastar termos e operadores para uma área de montagem,
+  reordenar as peças, remover ao arrastar e soltar fora da caixa e desfazer,
+  com alternativa por toque e teclado. Soltar uma peça da lista fora da caixa não
+  altera a fórmula; cancelar um arraste não remove a peça.
+- Escrever de memória: digitar a equação inteira.
+- Encontrar o erro: receber uma equação incorreta já montada e corrigir por
+  arraste, reordenação, remoção ou adição de peças, com validação automática.
+- Escolher pelo enunciado: selecionar a equação adequada, sem calcular, e
+  receber feedback de acerto, erro ou ausência de seleção, com resposta esperada.
+- Explicar o significado: explicar os termos e a relação entre eles.
+
+Na montagem, manter a fórmula em uma única linha. Ajustar automaticamente o
+tamanho do texto das peças e o espaçamento entre letras conforme a largura
+disponível, com fonte mínima de 12 px e espaçamento mínimo de −0,3 px.
+Quando ainda houver conteúdo excedente, exibir uma barra horizontal própria
+enquanto existir overflow, inclusive no iPhone, permitindo navegar pela fórmula.
+
+**Fluxo:** tentar lembrar → revelar resposta → comparar → avaliar → próximo cartão.
+A resposta escrita é opcional, permitindo revelar quando o aluno não lembrar.
+Após revelar, bloquear a edição e mostrar a resposta e a explicação. A avaliação
+é do estudante, considerando a lembrança anterior à revelação; os métodos Montar a fórmula, Encontrar o erro e Escolher pelo enunciado têm
+correção automática ao conferir, distinguindo acerto,
+erro e ausência de resposta. Aceitar os dois lados da igualdade trocados e a ordem
+de fatores multiplicativos sem inverter divisões ou subtrações. Os outros métodos
+continuam com comparação e autoavaliação. O feedback de acerto não atribui
+automaticamente uma nota de lembrança.
+
+| Nota | Avaliação | Retorno à fila |
+| --- | --- | --- |
+| 1 | Não lembrei | Após 1 outro cartão, quando possível |
+| 2 | Lembrei pouco | Após 3 outros cartões, quando possível |
+| 3 | Lembrei com esforço | Após 6 outros cartões, quando possível |
+| 4 | Lembrei bem | Após 10 outros cartões, quando possível |
+| 5 | Lembrei fácil | Retirar do treino |
+
+**Algoritmo:** embaralhar os 102 cartões com uma semente própria do treino e
+salvar essa ordem. Cada fórmula pertence a um grupo de indicador: pesos e
+limpeza (FC), cocção (IC), reidratação (IR), porções e rendimento ou compra e custo.
+Quando houver outro grupo pendente, não entregar dois cartões do mesmo grupo
+seguidos. Se restar somente um grupo, alternar seus cartões enquanto possível.
+
+As notas de 1 a 4 programam o retorno do cartão em posições virtuais, conforme a
+tabela acima. A nota também atualiza a força de lembrança do grupo: na primeira
+avaliação, usar a própria nota; nas seguintes, combinar 60% da força anterior com
+40% da nota recente. Grupos sem avaliação começam com força 3. Sortear entre os
+grupos elegíveis com peso `6 − força`: quanto menor a lembrança, maior a frequência,
+sem retirar por completo os demais grupos.
+
+Dentro do grupo escolhido, combinar revisão com reforço de fórmulas relacionadas:
+40% de preferência por cartões ainda não apresentados e 60% por cartões praticados
+com retorno disponível, usando o conjunto disponível se um deles estiver vazio.
+Priorizar retornos mais antigos e desempatar pela ordem embaralhada. Os cartões
+com nota 5 ficam fora da seleção. Se não houver cartões disponíveis no grupo
+alternativo, avançar até o retorno mais próximo, sem espera por horário ou dia.
+Os intervalos são referências de prioridade; a mistura entre indicadores e suas
+frequências adaptativas determinam a distância efetiva entre repetições.
+
+**Progresso:** salvar automaticamente nota e quantidade de tentativas por cartão,
+posições da fila, ordem embaralhada, semente, cartões recentes e força de lembrança
+por grupo, além do cartão atual, rascunho e estado de revelação no navegador.
+Migrar treinos antigos preservando avaliações e a resposta em andamento.
+Recuperar cartões válidos e incluir novos cartões como pendentes. O treino só
+termina quando todos os cartões do catálogo ativo tiverem nota 5. Mostrar
+contagem de cartões com nota máxima e ação para treinar novamente. Reiniciar
+exige confirmação na interface e afeta somente este modo. Falhas de armazenamento
+usam o aviso global e permitem continuar em memória.
+
 ## 5. Regras transversais
 
 ### 5.1. Correção e pontuação
@@ -300,6 +381,13 @@ Não fazem parte da experiência atual: conta de usuário, sincronização entre
 14. O acesso direto a Dicas e suas âncoras continua funcionando após recarregar.
 15. Em telas pequenas, enunciado, materiais e ações continuam legíveis e utilizáveis.
 16. Se o módulo interativo for incluído, seu carregamento e falha são comunicados e há ação para tentar novamente.
+
+17. Decorar fórmulas oferece os seis métodos, com avaliação individual de cada cartão.
+18. As cinco notas determinam a fila de retorno e a frequência do indicador; cartões com nota 5 saem do treino.
+19. O treino continua enquanto houver qualquer cartão sem nota 5, mesmo que reste só um.
+20. Recarregar retoma o cartão, rascunho, revelação e avaliações do treino de fórmulas.
+21. O modo de fórmulas não modifica as dicas, notas ou histórico das questões.
+22. Embaralhar os cartões e alternar indicadores enquanto houver outro grupo pendente; dificuldade em uma fórmula aumenta a frequência de cartões relacionados.
 
 ### Recorte atual da ficha técnica
 
