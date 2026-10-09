@@ -187,3 +187,64 @@ cortes no conteúdo ativo inteiro (alternativas e dicas incluídas), respostas
 numéricas, filtros e restauração de sessões sem questões ocultas. Build, lint e
 checagem TypeScript aprovados. As fontes continuam internas e neste registro;
 nenhuma seção de referências foi recolocada no site.
+
+## Lista com redação original
+
+A pedido do usuário, o banco passou a distinguir três origens: **Lista da
+professora** (36 itens originais), **Derivadas da lista** (14 perguntas diferentes
+com dados ou instruções da lista) e **Questões autorais** (30). Total: 80 questões
+ativas. Apenas tipos de cortes continuam excluídos nesse novo pedido; a categoria
+Análise sensorial previamente oculta permanece fora do banco.
+
+As sete páginas com exercícios foram renderizadas como imagens e conferidas.
+Os enunciados originais mantêm palavras, dados, pontuação e erros de digitação
+impressos, ajustando apenas as quebras de linha do PDF. A numeração repetida dos
+itens 24 e 25 foi preservada; os dois exercícios de receitas têm IDs distintos.
+O gabarito em vermelho não integra o enunciado visível antes da resposta.
+
+As tabelas dos itens 10, 34, macarrão e biscoito são tabelas HTML, incluindo
+colunas, linhas, unidades e cabeçalhos agrupados da ficha. As células vermelhas
+de resposta do PDF ficam como campos a preencher no papel, indicados por “?”,
+e seus valores originais aparecem na comparação. Os custos em preto na tabela
+de fornecedores são dados do enunciado e permanecem visíveis. As ressalvas
+sobre energia do macarrão e os fatores trocados nas linhas do biscoito continuam
+separadas da transcrição original.
+
+Foram retiradas do banco ativo cinco autorais que repetiam as perguntas gerais
+sobre objetivos, sete objetivos, necessidade de pesar/medir, per capita/porção
+e objetivos da ficha técnica. O catálogo e o histórico são conservados para não
+apagar tentativas anteriores. Questões mais específicas e exemplos com dados
+diferentes continuam disponíveis.
+
+Os 21 itens discursivos/de tabela usam autoavaliação após consultar uma resposta
+de apoio. Respostas teóricas de apoio foram elaboradas com os slides, pois a lista
+não fornece gabarito para elas; não são apresentadas como transcrições da
+professora. Os cálculos com resposta única continuam com correção numérica.
+O rascunho opcional da autoavaliação é temporário; o histórico salva a avaliação,
+assim como nos demais exercícios. As tabelas largas têm rolagem própria.
+
+Há testes de regressão que comparam todos os enunciados com uma transcrição
+conferida visualmente, verificam estrutura das tabelas, origens e integração da
+autoavaliação com correção, dicas e restauração de sessões.
+
+### Questão 10 com preenchimento nas células
+
+As cinco células de resposta da questão 10 agora são campos numéricos na própria
+tabela, sem rascunho temporário ou autoavaliação. As células fornecidas no
+enunciado continuam fixas. A correção exige os cinco valores e confere cada
+resultado com duas casas decimais, aceitando vírgula ou ponto. A questão só conta
+como correta quando todas as células estão corretas.
+
+O preenchimento integra o draft da sessão e a resposta confirmada, preservando
+os valores ao retomar um teste e exibindo-os no resultado. O uso da dica mantém
+a questão na revisão mesmo com todos os valores corretos. Há 20 questões com
+autoavaliação e uma questão de tabela com correção automática. Os 47 testes,
+incluindo correção por célula e persistência da tabela, foram aprovados.
+
+### Exercícios completos de receitas retirados
+
+Por solicitação do usuário, os itens originais 25 (macarrão) e 24 (biscoito)
+foram retirados dos fluxos ativos, incluindo banco, testes e revisão. O catálogo
+conserva sua transcrição e o histórico anterior. As derivadas com perguntas
+diferentes permanecem, conforme o pedido de manter esse tipo de exercício.
+O banco ativo passa a ter 78 questões: 34 originais, 14 derivadas e 30 autorais.

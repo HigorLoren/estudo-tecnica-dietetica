@@ -125,14 +125,14 @@ test('storage failures are reported and usable state remains in memory', () => {
 test('bank combines filters and finds an empty selection without altering the full bank', () => {
   assert.equal(filterBankQuestions({ subject: 'all', type: 'all' }).length, questions.length)
   const numeric = filterBankQuestions({ subject: 'indicadores', type: '2' })
-  assert.equal(numeric.length, 32)
+  assert.equal(numeric.length, 42)
   assert.ok(numeric.every(question => question.type === 2 && question.subject === 'indicadores'))
-  assert.equal(filterBankQuestions({ subject: 'fundamentos', type: '2' }).length, 0)
+  assert.equal(filterBankQuestions({ subject: 'fundamentos', type: '2' }).length, 1)
 })
 
-test('hidden worksheet questions leave resumed sessions without losing their history', () => {
+test('removed duplicate questions leave resumed sessions without losing their history', () => {
   const progress = sampleProgress()
-  const hidden = questionCatalog.find(question => question.id === 'lista-25-alho')!
+  const hidden = questionCatalog.find(question => question.id === 'revisao-padronizacao')!
   progress.session!.questions.unshift(hidden)
   progress.session!.index += 1
   progress.history = recordAttempt(progress.history, hidden.id, 'incorrect')

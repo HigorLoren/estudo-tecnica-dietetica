@@ -1,4 +1,7 @@
 import type { Question } from './questions'
+import { originalListItems } from './original-list-data.ts'
+import { originalListTables } from './original-list-tables.ts'
+import { originalListFormulas } from './original-list-formulas.ts'
 
 type Calculation = Omit<Question, 'type' | 'answer' | 'subject' | 'caution'> & {
   numeric: number; subject?: string; caution?: string;
@@ -7,7 +10,7 @@ function calculation(item: Calculation): Question {
   const number = item.numeric.toLocaleString('pt-BR', {
     minimumFractionDigits: 2, maximumFractionDigits: 2,
   })
-  return { ...item, type: 2, origin: 'professora', subject: item.subject ?? 'indicadores',
+  return { ...item, type: 2, origin: 'derivada', subject: item.subject ?? 'indicadores',
     answer: item.unit === 'R$' ? `R$ ${number}` : `${number}${item.unit ? ` ${item.unit}` : ''}`,
     caution: item.caution ?? 'Use as unidades pedidas e arredonde apenas o resultado final para duas casas decimais.',
   }
@@ -15,7 +18,7 @@ function calculation(item: Calculation): Question {
 const source = (item: string, page: number) =>
   `Lista da professora · 2026 · item ${item}, p. ${page}. Questão adaptada; cálculo conferido.`
 
-export const listQuestions: Question[] = [
+const adaptedQuestions: Question[] = [
   calculation({ id: 'lista-07-fc', topic: 'FC · lista 7',
     prompt: 'Na lista da professora, PB = 50 kg e PL = 44 kg. Calcule o FC com duas casas decimais.',
     numeric: 50 / 44, formula: 'FC = PB ÷ PL\nFC = 50 ÷ 44 ≈ 1,14',
@@ -114,22 +117,22 @@ export const listQuestions: Question[] = [
     explanation: 'A receita descreve a parte limpa; o peso de compra deve incluir a casca.', source: source('25, macarrão', 5) }),
   calculation({ id: 'lista-25-porcao-macarrao', subject: 'ficha', topic: 'Ficha técnica · peso da porção',
     prompt: 'O macarrão alho e óleo rende 2 kg de preparação pronta e 28 porções iguais. Qual é o peso de cada porção, em gramas?',
-    numeric: 2000 / 28, unit: 'g', formula: 'Porção = 2.000 ÷ 28 ≈ 71,43 g',
+    numeric: 2000 / 28, unit: 'g', formula: 'Porção = rendimento ÷ nº de porções\nPorção = 2.000 ÷ 28 ≈ 71,43 g',
     explanation: 'Use o rendimento pronto total, e não apenas o peso do macarrão cru.', source: source('25, macarrão', 5) }),
   calculation({ id: 'lista-biscoito-porcoes', subject: 'ficha', topic: 'Biscoito · número de porções',
     prompt: 'A receita de biscoito de queijo assado rende 550 g. Quantas porções de 25 g ela fornece?',
-    numeric: 22, unit: 'porções', formula: 'Número de porções = 550 ÷ 25 = 22',
+    numeric: 22, unit: 'porções', formula: 'Número de porções = rendimento ÷ peso da porção\nNúmero de porções = 550 ÷ 25 = 22',
     explanation: 'O número de porções vem do rendimento pronto dividido pelo peso de cada porção.',
     source: source('24 repetido, biscoito', 6) }),
   calculation({ id: 'lista-biscoito-energia', subject: 'ficha', topic: 'Biscoito · energia total',
     prompt: 'Usando os totais da tabela do biscoito (36,12 g de proteínas, 155,2 g de lipídeos e 215,6 g de carboidratos), calcule a energia total em kcal. Use os fatores 4, 9 e 4, respectivamente. Responda com duas casas decimais, sem separador de milhares.',
-    numeric: 2403.68, unit: 'kcal', formula: '36,12 × 4 + 155,2 × 9 + 215,6 × 4 = 2.403,68 kcal',
+    numeric: 2403.68, unit: 'kcal', formula: 'Energia = proteína × 4 + lipídeos × 9 + carboidratos × 4\nEnergia = 36,12 × 4 + 155,2 × 9 + 215,6 × 4 = 2.403,68 kcal',
     explanation: 'Proteínas fornecem 144,48 kcal, lipídeos 1.396,80 kcal e carboidratos 862,40 kcal, segundo os dados do exercício.',
     caution: 'As linhas explicativas do PDF trocam os fatores de lipídeos e carboidratos. O total está correto; use 9 para lipídeos e 4 para carboidratos. Digite sem separador de milhares.',
     source: source('24 repetido, biscoito', 6) }),
   calculation({ id: 'lista-biscoito-energia-porcao', subject: 'ficha', topic: 'Biscoito · energia por porção',
     prompt: 'O biscoito tem energia total de 2.403,68 kcal e rende 550 g. Qual é a energia de uma porção de 25 g, em kcal?',
-    numeric: 2403.68 / 22, unit: 'kcal', formula: '2.403,68 ÷ (550 ÷ 25) ≈ 109,26 kcal',
+    numeric: 2403.68 / 22, unit: 'kcal', formula: 'Energia por porção = energia total ÷ nº de porções\nEnergia por porção = 2.403,68 ÷ (550 ÷ 25) ≈ 109,26 kcal',
     explanation: 'A receita rende 22 porções. Divida a energia total por esse número.', source: source('24 repetido, biscoito', 6) }),
   calculation({ id: 'lista-34-lavoura', topic: 'Fornecedor · Lavoura encantada',
     prompt: 'O tomate da Lavoura encantada custa R$ 5,65/kg bruto e tem FC de 1,18. Qual é o custo por kg utilizável, em reais?',
@@ -144,10 +147,42 @@ export const listQuestions: Question[] = [
     numeric: 5.82 * 1.15, unit: 'R$', formula: 'Custo real = preço por kg bruto × FC\nCusto real = 5,82 × 1,15 = 6,693 ≈ R$ 6,69',
     explanation: 'O menor FC reduz perdas, mas a decisão também considera o preço bruto.', source: source('34', 7) }),
   { id: 'lista-34-fornecedor', subject: 'indicadores', topic: 'Escolha do fornecedor', type: 0,
-    origin: 'professora',
+    origin: 'derivada',
     prompt: 'Considerando apenas o custo por kg utilizável dos tomates, quem apresenta o menor custo: Lavoura encantada (R$ 5,65/kg; FC 1,18), Nossa horta (R$ 5,50/kg; FC 1,25) ou Horta da cidade (R$ 5,82/kg; FC 1,15)?',
     options: ['Lavoura encantada', 'Nossa horta', 'Horta da cidade'], answer: 'Lavoura encantada',
     explanation: 'Os custos reais são aproximadamente R$ 6,67, R$ 6,88 e R$ 6,69 por kg líquido, respectivamente.',
     caution: 'O exercício compara custo. Na compra real, outros requisitos de qualidade também precisam ser atendidos.',
     source: source('34', 7) },
+]
+
+const originalIds = new Set(originalListItems.map(item => item.id))
+const originalQuestions: Question[] = originalListItems.map(item => {
+  const adapted = adaptedQuestions.find(question => question.id === item.id)
+  const { number, page, ...original } = item
+  return {
+    subject: 'indicadores', answer: '',
+    explanation: 'Resposta de apoio elaborada a partir dos slides da professora.',
+    caution: 'Responda antes de consultar a resposta de apoio. Compare todos os pontos pedidos.',
+    ...adapted, ...original, type: 2, origin: 'professora',
+    options: undefined,
+    topic: `Lista · questão ${number}${item.id.endsWith('macarrao') ? ' · macarrão'
+      : item.id.endsWith('biscoito') ? ' · biscoito' : ''}`,
+    source: `Lista da professora · 2026 · item ${number}, p. ${page}. Enunciado original.`,
+    tables: originalListTables[item.id],
+    formula: originalListFormulas[item.id] ?? adapted?.formula,
+  }
+})
+const worksheet = originalQuestions.find(question => question.id === 'lista-original-macarrao')!
+const tableExercise = originalQuestions.find(question => question.id === 'lista-original-10')!
+tableExercise.selfAssess = false
+tableExercise.tableAnswer = true
+worksheet.caution = 'A tabela reproduz o PDF, que usa 66 mL de óleo como 66 g sem informar densidade. A energia impressa não está validada. O valor da porção e o PB do alho podem ser calculados pelos dados do enunciado.'
+const biscuit = originalQuestions.find(question => question.id === 'lista-original-biscoito')!
+biscuit.caution = 'No gabarito, as linhas de lipídeos e carboidratos trocam os fatores. Use 9 kcal/g para lipídeos e 4 para proteínas e carboidratos. Os totais das tabelas correspondem aos fatores corretos.'
+const supplier = originalQuestions.find(question => question.id === 'lista-34-fornecedor')!
+supplier.accepted = ['Lavoura encantada', 'Lavoura']
+
+export const listQuestions: Question[] = [
+  ...originalQuestions,
+  ...adaptedQuestions.filter(question => !originalIds.has(question.id)),
 ]

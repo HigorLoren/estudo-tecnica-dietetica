@@ -3,6 +3,7 @@ import { questions, type Question } from './questions'
 import { filterBankQuestions, formats, subjects, type BankFilters } from './study-data'
 import type { History } from './practice-model'
 import { Icon } from './icons'
+import { originLabels, questionFormat } from './question-content'
 
 function QuestionItem({ question, history, onOpen }: {
   question: Question; history: History; onOpen: (id: string) => void;
@@ -13,7 +14,8 @@ function QuestionItem({ question, history, onOpen }: {
       <span className="bank-question-content">
         <strong>{question.topic}</strong>
         <span className="bank-question-prompt">{question.prompt}</span>
-        <span className="bank-question-meta">{formats[question.type]}
+        <span className="bank-question-meta">{questionFormat(question)}
+          <span className="question-origin">{originLabels[question.origin ?? 'autoral']}</span>
         </span>
       </span>
       <span className="bank-question-end">
@@ -65,6 +67,7 @@ export function BankScreen({ filters, onFilter, history, onOpen, onBack }: {
             onChange={event => onFilter({ ...filters, origin: event.currentTarget.value })}>
             <option value="all">Todas as origens</option>
             <option value="professora">Lista da professora</option>
+            <option value="derivada">Derivadas da lista</option>
             <option value="autoral">Questões autorais</option>
           </select>
         </div>

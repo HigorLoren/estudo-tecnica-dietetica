@@ -39,6 +39,5 @@ export function filterBankQuestions(filters: BankFilters) {
   return questions.filter(question => (filters.subject === 'all'
     || question.subject === filters.subject) && (filters.type === 'all'
     || question.type === Number(filters.type)) && (!filters.origin || filters.origin === 'all'
-      || (filters.origin === 'professora' ? question.origin === 'professora'
-        : question.origin !== 'professora')))
+      || (question.origin ?? 'autoral') === filters.origin))
 }

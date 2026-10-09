@@ -1,6 +1,7 @@
 import type { Configuration } from './configuration-screen'
 import { needsReview, type Attempt, type Session } from './practice-model.ts'
 import type { Question } from './questions'
+import { displayTableAnswer } from './table-answer.ts'
 
 export function getTestResult(session: Session) {
   const total = session.questions.length
@@ -20,6 +21,7 @@ export function formatPoints(value: number) {
 
 export function displayStudentAnswer(question: Question, attempt: Attempt) {
   if (attempt.result === 'unknown' || !attempt.answer.trim()) return 'Não sei'
+  if (question.tableAnswer) return displayTableAnswer(question, attempt.answer)
   if (!question.unit) return attempt.answer
   return question.unit === 'R$' ? `R$ ${attempt.answer}` : `${attempt.answer} ${question.unit}`
 }

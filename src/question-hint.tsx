@@ -20,7 +20,8 @@ const equations = [
 export function QuestionHint({ question, used, confirmed, onHint }: {
   question: Question; used: boolean; confirmed: boolean; onHint: () => void;
 }) {
-  const calculation = question.numeric !== undefined
+  const calculation = question.numeric !== undefined || question.tables?.some(table =>
+    table.solutions !== undefined)
   return (
     <div className="question-hint">
       <button type="button" className="outline-button" disabled={confirmed || used}
@@ -31,7 +32,7 @@ export function QuestionHint({ question, used, confirmed, onHint }: {
         aria-label="Dica da questão">
         <p className="hint-review-note"><strong>Não decorada.</strong> Esta questão entra na
           revisão mesmo com a resposta certa.</p>
-        {calculation ? <>
+        {question.id === 'revisao-densidade' ? <p>Densidade = massa ÷ volume</p> : calculation ? <>
           <h2>Equações básicas dos indicadores</h2>
           <p>PB: peso bruto. PL: peso líquido cru.
             Per capita: quantidade individual crua e limpa.</p>
@@ -39,7 +40,6 @@ export function QuestionHint({ question, used, confirmed, onHint }: {
             <dt>{equation.name}</dt>
             {equation.lines.map(line => <dd key={line}>{line}</dd>)}
           </div>)}</dl>
-          {question.subject === 'pesos' && <p>Densidade = massa ÷ volume.</p>}
           <p>Use unidades compatíveis. Para passar de g para kg, divida por 1.000.
             Arredonde apenas o resultado final.
             A margem de segurança só entra se for solicitada.</p>

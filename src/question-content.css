@@ -1,0 +1,29 @@
+.question-content .question-prompt { white-space: pre-line; }
+.question-table-scroll { width: 100%; overflow-x: auto; margin: 16px 0; }
+.question-table { border-collapse: collapse; width: 100%; font-size: 14px; }
+.question-table caption { text-align: left; font-weight: 600; padding-bottom: 9px; }
+.question-table th, .question-table td { border: 1px solid var(--border, #ddd);
+  padding: 9px 10px; text-align: left; vertical-align: top; }
+.question-table thead { background: #f5f4ef; }
+.question-table tbody th { font-weight: 500; min-width: 110px; }
+.question-table td { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.question-table .table-solution { color: #8c382c; font-weight: 600; }
+.table-answer-input { width: 100%; min-width: 46px; max-width: 100px; box-sizing: border-box;
+  padding: 6px 7px; border: 1px solid #a8bcc4; border-radius: 5px; font: inherit;
+  font-variant-numeric: tabular-nums; background: #fff; color: inherit; }
+.table-answer-input:focus { outline: 2px solid #236783; outline-offset: 1px; }
+.table-answer-input:disabled { background: #f5f4ef; border-color: #ddd; }
+.self-assessment { margin-top: 22px; }
+.self-assessment > label { display: block; margin: 12px 0 6px; font-weight: 600; }
+.self-assessment textarea { width: 100%; box-sizing: border-box; resize: vertical;
+  padding: 12px; border: 1px solid #d9dbd1; border-radius: 8px; font: inherit; }
+.self-assessment > button { margin: 14px 0; }
+.self-assessment-support { padding: 16px; background: #f5f4ef; border-radius: 8px; }
+.self-assessment-support h2 { font-size: 17px; margin-top: 0; }
+.bank-question-meta .question-origin { margin-left: 12px; }
+@media (max-width: 600px) {
+  .question-table { font-size: 12px; }
+  .question-table th, .question-table td { padding: 7px 6px; }
+  .question-table tbody th { min-width: 90px; }
+  .self-assessment-support { padding: 10px; }
+}

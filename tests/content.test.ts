@@ -32,12 +32,14 @@ test('teacher calculations accept independently checked rounded results', () => 
 test('origin and subject filters combine without excluding old questions by default', () => {
   const teacher = filterBankQuestions({ subject: 'all', type: 'all', origin: 'professora' })
   const authored = filterBankQuestions({ subject: 'all', type: 'all', origin: 'autoral' })
-  assert.equal(teacher.length, 23)
-  assert.equal(teacher.length + authored.length, questions.length)
+  assert.equal(teacher.length, 34)
+  const derived = filterBankQuestions({ subject: 'all', type: 'all', origin: 'derivada' })
+  assert.equal(derived.length, 14)
+  assert.equal(teacher.length + derived.length + authored.length, questions.length)
   assert.equal(filterBankQuestions({ subject: 'all', type: 'all' }).length, questions.length)
   assert.ok(!teacher.some(question => question.id === 'ficha-peso-receita'))
   const numeric = filterBankQuestions({ subject: 'ficha', type: '2', origin: 'professora' })
-  assert.equal(numeric.length, 0)
+  assert.equal(numeric.length, 3)
   assert.equal(filterBankQuestions({ subject: 'sensorial', type: 'all', origin: 'professora' }).length, 0)
 })
 
@@ -57,13 +59,14 @@ test('expanded content has valid categories, complete corrections and unambiguou
   assert.ok(byId('revisao-maillard').caution.includes('imprecisa'))
 })
 
-test('worksheet practice is hidden while theory and indicator exercises remain available', () => {
+test('full recipe tasks are excluded while derivatives and theory remain available', () => {
   const worksheet = questions.filter(question => question.subject === 'ficha')
-  assert.deepEqual(worksheet.map(question => question.id), ['revisao-ficha-objetivos'])
-  assert.equal(questionCatalog.length - questions.length, 15)
+  assert.ok(!worksheet.some(question => question.id === 'lista-original-macarrao'))
+  assert.ok(!worksheet.some(question => question.id === 'lista-original-biscoito'))
+  assert.ok(worksheet.some(question => question.id === 'lista-25-alho'))
+  assert.ok(!worksheet.some(question => question.id === 'revisao-ficha-objetivos'))
+  assert.equal(questionCatalog.length - questions.length, 16)
   assert.deepEqual(tips.filter(tip => tip.group === 'ficha').map(tip => tip.id), ['ficha-tecnica'])
-  assert.equal(tips.find(tip => tip.id === 'ficha-tecnica')!.formula, undefined)
-  assert.ok(questions.some(question => question.id === 'lista-24-compra'))
 })
 
 test('sensory analysis is excluded from every active content list', () => {
@@ -78,7 +81,7 @@ test('active questions and tips contain no technical cut types, including distra
   const cuts = /julienne|brunoise|chiffonade|bastonetes|noisette|cortes técnicos|tipos de corte/i
   for (const question of questions) assert.ok(!cuts.test(JSON.stringify(question)), question.id)
   for (const tip of tips) assert.ok(!cuts.test(JSON.stringify(tip)), tip.id)
-  assert.equal(questions.length, 58)
+  assert.equal(questions.length, 78)
   assert.equal(tips.length, 21)
   assert.equal(gradeAnswer(byId('revisao-densidade'), '0,90'), 'correct')
 })

@@ -22,8 +22,11 @@ export function defaultProgress(): Progress {
 }
 
 function signature(question: Question) {
-  return JSON.stringify([question.prompt, question.type, question.answer, question.numeric,
-    question.unit, question.accepted, question.incomplete, question.options?.toSorted()])
+  const fields = [question.prompt, question.type, question.answer, question.numeric,
+    question.unit, question.accepted, question.incomplete, question.options?.toSorted()]
+  return JSON.stringify(question.selfAssess || question.tables
+    ? [...fields, question.selfAssess, question.tables,
+      ...(question.tableAnswer ? [true] : [])] : fields)
 }
 
 function restoreConfig(value: unknown): Configuration {

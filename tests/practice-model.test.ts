@@ -12,9 +12,9 @@ const categoryIds = subjects.map(subject => subject.id)
 
 test('counts and eligibility reflect the real bank and combined filters', () => {
   assert.equal(new Set(questions.map(question => question.id)).size, questions.length)
-  assert.equal(getAvailability(categoryIds, [0, 1, 2], false), 58)
-  assert.equal(getAvailability(['indicadores'], [0, 1, 2], false), 36)
-  assert.equal(getAvailability(['indicadores'], [2], false), 32)
+  assert.equal(getAvailability(categoryIds, [0, 1, 2], false), 78)
+  assert.equal(getAvailability(['indicadores'], [0, 1, 2], false), 44)
+  assert.equal(getAvailability(['indicadores'], [2], false), 42)
   assert.equal(getAvailability([], [0, 1, 2], false), 0)
   assert.equal(getAvailability(categoryIds, [], false), 0)
   assert.equal(getAvailability(categoryIds, [0, 1, 2], true), 0)

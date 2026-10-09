@@ -1,0 +1,182 @@
+[
+  {
+    "key": "1",
+    "number": "1",
+    "prompt": "Quais são os objetivos de Técnica Dietética?"
+  },
+  {
+    "key": "2",
+    "number": "2",
+    "prompt": "Exemplifique as técnicas de pré-preparo: divisão simples, divisão com separação, separação de sólidos, separação de um sólido de um líquido e mistura/união."
+  },
+  {
+    "key": "3",
+    "number": "3",
+    "prompt": "Por que é necessário pesar e medir os alimentos?"
+  },
+  {
+    "key": "4",
+    "number": "4",
+    "prompt": "Quais são os objetivos dos indicadores?"
+  },
+  {
+    "key": "5",
+    "number": "5",
+    "prompt": "O que é o Fator de Correção (FC) dos alimentos? Como é calculado? Qual a sua utilização em UAN?"
+  },
+  {
+    "key": "6",
+    "number": "6",
+    "prompt": "Diferencie Peso bruto e peso líquido."
+  },
+  {
+    "key": "7",
+    "number": "7",
+    "prompt": "Calcule o Fator de Correção (FC), considerando PB= 50 Kg e PL= 44 Kg."
+  },
+  {
+    "key": "8",
+    "number": "8",
+    "prompt": "Calcule o PL de uma couve-flor, sabendo-se que o PB= 18kg e o FC= 2,03"
+  },
+  {
+    "key": "9",
+    "number": "9",
+    "prompt": "Calcule o PB do coxão mole sabendo-se que PL= 65 Kg e o FC= 1,05."
+  },
+  {
+    "key": "10",
+    "number": "10",
+    "prompt": "Preencha a tabela abaixo:"
+  },
+  {
+    "key": "11",
+    "number": "11",
+    "prompt": "Em um restaurante o cozinheiro pediu para o seu auxiliar preparar 10 kg decenoura picadas. Sabendo que o fator de correção da cenoura é 1,22, quantosquilos de cenoura o auxiliar deve buscar no estoque para fazer o pré-preparo?"
+  },
+  {
+    "key": "12",
+    "number": "12",
+    "prompt": "Em uma UAN o cozinheiro tem um estoque de 1 saco de batatas de 50 kg e deseja que o auxiliar pré-prepare estas batatas para um purê. Sabendo que o FC das batatas nessa UAN é 1,2, quantos quilos de batata pré-preparada descascadas este saco de batatas renderá?"
+  },
+  {
+    "key": "13",
+    "number": "13",
+    "prompt": "Na época das chuvas a perda com a escarola está muito elevada. Por este motivo o nutricionista precisou solicitar uma quantidade muito grande. Sabendoque são consumidos 50 Kg por dia (PL) e que o FC da escarola é de 1,92, qual é a quantidade a ser obtida?"
+  },
+  {
+    "key": "14",
+    "number": "14",
+    "prompt": "Dado que FC de um corte de carne é de 2,8 e que o PL diário é 100,6 Kg, calcule a quantidade a ser adquirida."
+  },
+  {
+    "key": "15",
+    "number": "15",
+    "prompt": "Qual o objetivo do Índice de conversão (IC) dos alimentos? Como é calculado?"
+  },
+  {
+    "key": "16",
+    "number": "16",
+    "prompt": "Por que determinados alimentos têm IC menor do que 1 e outros o têm maior doque um? Exemplifique."
+  },
+  {
+    "key": "17",
+    "number": "17",
+    "prompt": "Determine o Índice de cocção (IC) de 100g de macarrão espaguete seco que,após cozimento em água fervente rende 283 g."
+  },
+  {
+    "key": "18",
+    "number": "18",
+    "prompt": "José da Silva todos os dias se serve de 55g de uma verdura (porção), quecorresponde a um per capita de 110g. Calcule o IC."
+  },
+  {
+    "key": "19",
+    "number": "19",
+    "prompt": "O técnico de nutrição e dietética João trabalha em uma Unidade de Alimentaçãoe Nutrição que serve em seu cardápio duas vezes na semana a porção de 120gde carne assada, que corresponde a um peso inicial (PL) de 200g. Calcule o Índice de Conversão (IC)."
+  },
+  {
+    "key": "20",
+    "number": "20",
+    "prompt": "Você tem 750g de filé de peixe limpo que será frito em imersão. Sabendo que oíndice de cocção do filé de peixe frito é 0,60, quanto essa quantidade de peixe irá render?"
+  },
+  {
+    "key": "21",
+    "number": "21",
+    "prompt": "Como é calculado o Indicador de Reidratação? Qual o seu objetivo?"
+  },
+  {
+    "key": "22",
+    "number": "22",
+    "prompt": "Foram adquiridos 200 kg de coxão-mole para servir 1250 refeições. Qual o rendimento da carne, considerando IPC= 1,20 e IC= 0,76?"
+  },
+  {
+    "key": "23",
+    "number": "23",
+    "prompt": "Quanto comprar de carne para 100 refeições, sendo que o per capita é de 160g e o fator de correção é 1,23 com margem de segurança de 10%?"
+  },
+  {
+    "key": "24",
+    "number": "24",
+    "prompt": "Quanto comprar de coxa e sobrecoxa para 260 refeições, sendo que o per capita é de 180g e o fator de correção é 1,4 com margem de segurança de 10%?"
+  },
+  {
+    "key": "macarrao",
+    "number": "25",
+    "prompt": "Ficha Técnica de Preparo de Alimentos: - Preencher a ficha técnica para o macarrão alho e óleo; - Lembre-se que o que está descrito na receita é o PL!! - Ingredientes e modo de preparo: Cozinhar 2 pacotes de macarrão (1 Kg) em água fervente. Higienizar 7 unidades (30 g) de alho conforme o Manual de Boas Práticas da empresa, descascar, picar, fritar com 1 copinho de café (66 ml) de óleo em uma panela a parte e mexer bem até dourar. Escorrer o macarrão, acrescentar o alho refogado e 2 colher de chá (20 g de sal). Porcionar e servir. - Rendimento: 2 Kg/28 porções Informação nutricional (100g TACO, 2011): - Macarrão, trigo, cru: 10g proteínas; 1,3g lipídeos; 77,9g carboidratos; - Alho cru: 7g proteína; 0,2g lipídeos; 23,9g carboidrato; - Óleo de soja: não contém proteínas e carboidratos; 100g de lipídeos. - FC do alho: 1,2"
+  },
+  {
+    "key": "biscoito",
+    "number": "24",
+    "prompt": "Calcule o valor nutritivo de uma porção de um biscoito de queijo de 25g. Ingredientes da receita: - 200g de queijo - 280g farinha de trigo - 120g de margarina A receita pronta (assada) pesou 550g."
+  },
+  {
+    "key": "25",
+    "number": "25",
+    "prompt": "Diferencie per capita x porção."
+  },
+  {
+    "key": "26",
+    "number": "26",
+    "prompt": "O que é a Ficha Técnica de Preparo de Alimentos? Cite objetivos e vantagensde uso."
+  },
+  {
+    "key": "27",
+    "number": "27",
+    "prompt": "Quais são as aplicações da Ficha Técnica?"
+  },
+  {
+    "key": "28",
+    "number": "28",
+    "prompt": "Qual a estrutura da Ficha Técnica?"
+  },
+  {
+    "key": "29",
+    "number": "29",
+    "prompt": "Quais os objetivos da cocção dos alimentos?"
+  },
+  {
+    "key": "30",
+    "number": "30",
+    "prompt": "Quais são as formas de transferência de calor? Explique."
+  },
+  {
+    "key": "31",
+    "number": "31",
+    "prompt": "Por que é interessante usar forno combinado em serviço de alimentação?"
+  },
+  {
+    "key": "32",
+    "number": "32",
+    "prompt": "Com relação as condições do meio de cocção, explique e descreve calor seco, úmido e misto. Apresente os termos técnicos aplicados e exemplos de preparações."
+  },
+  {
+    "key": "33",
+    "number": "33",
+    "prompt": "Diferencie e explique custo aparente e custo real. Qual a sua importância em termos de custo?"
+  },
+  {
+    "key": "34",
+    "number": "34",
+    "prompt": "Você irá credenciar fornecedores para uma empresa de alimentação e para isto pediu amostras de 1 kg de cada alimento (PB). Qual deles você escolheria?"
+  }
+]

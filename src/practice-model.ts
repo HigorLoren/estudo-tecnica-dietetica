@@ -1,4 +1,5 @@
 import type { Question } from './questions'
+import { isTableAnswerReady, gradeTableAnswer } from './table-answer.ts'
 
 export type Result = 'correct' | 'incorrect' | 'incomplete' | 'unknown'
 export type Attempt = { answer: string; result: Result; usedHint?: boolean }
@@ -20,11 +21,15 @@ export function normalizeAnswer(value: string) {
 }
 
 export function isAnswerReady(question: Question, value: string) {
+  if (question.tableAnswer) return isTableAnswerReady(question, value)
+  if (question.selfAssess) return ['Respondi corretamente', 'Preciso revisar'].includes(value)
   if (question.numeric !== undefined) return /^\d+(?:[,.]\d+)?$/.test(value.trim())
   return value.trim().length > 0
 }
 
 export function gradeAnswer(question: Question, value: string): Result {
+  if (question.tableAnswer) return gradeTableAnswer(question, value)
+  if (question.selfAssess) return value === 'Respondi corretamente' ? 'correct' : 'incorrect'
   if (question.numeric !== undefined) {
     if (!isAnswerReady(question, value)) return 'incorrect'
     const number = Number(value.trim().replace(',', '.'))

@@ -2,8 +2,8 @@ import { CalculationExplanation } from './calculation-explanation'
 import { useEffect, useRef, useState } from 'preact/hooks'
 import { needsReview, type Session } from './practice-model'
 import { displayStudentAnswer, formatPoints, getTestResult } from './result-model'
-import { formats } from './study-data'
 import { Icon } from './icons'
+import { QuestionContent, SolutionTables, questionFormat } from './question-content'
 
 type ResultRow = ReturnType<typeof getTestResult>['rows'][number]
 const resultLabels = {
@@ -30,8 +30,8 @@ function QuestionCorrection({ row, index, pointsPerQuestion }: {
         <span className="result-chevron" aria-hidden="true">⌄</span>
       </summary>
       <div className="result-question-details">
-        <p className="result-format">{formats[question.type]}</p>
-        <p className="result-full-prompt">{question.prompt}</p>
+        <p className="result-format">{questionFormat(question)}</p>
+        <QuestionContent question={question} draft={attempt.answer} disabled />
         <div className="answer-comparison">
           <div><h3>Sua resposta</h3><p>{displayStudentAnswer(question, attempt)}</p></div>
           <div><h3>Resposta correta</h3><p>{question.answer}</p></div>
@@ -43,6 +43,7 @@ function QuestionCorrection({ row, index, pointsPerQuestion }: {
           Esta questão fica na revisão até um acerto sem dica.</p>}
         <div className="result-explanation"><h3>Entenda a resposta</h3>
           <CalculationExplanation question={question} />
+          <SolutionTables question={question} />
           <p>{question.explanation}</p>
           <div className="learning-note"><Icon name="bulb" size={18} />
             <p>{question.caution}</p></div>

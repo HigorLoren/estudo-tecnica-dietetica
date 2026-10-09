@@ -10,11 +10,11 @@ const byId = (id: string) => questions.find(question => question.id === id)!
 
 function mixedSession() {
   const session = createSession([
-    byId('fundamentos-objetivos'), byId('ic-calculo'),
+    byId('revisao-objetivo-nutritivo'), byId('ic-calculo'),
     byId('pre-preparo-organizacao'), byId('compra-uan'),
   ])
   session.answers = {
-    'fundamentos-objetivos': { answer: byId('fundamentos-objetivos').answer, result: 'correct' },
+    'revisao-objetivo-nutritivo': { answer: byId('revisao-objetivo-nutritivo').answer, result: 'correct' },
     'ic-calculo': { answer: '1,33', result: 'incorrect' },
     'pre-preparo-organizacao': { answer: 'mise', result: 'incomplete' },
     'compra-uan': { answer: 'Não sei', result: 'unknown' },

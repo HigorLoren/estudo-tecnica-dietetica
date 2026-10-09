@@ -1,5 +1,6 @@
 import { listQuestions } from './list-questions.ts'
 import { reviewQuestions } from './review-questions.ts'
+import type { QuestionTable } from './original-list-tables'
 
 export type Question = {
   id: string
@@ -17,7 +18,10 @@ export type Question = {
   explanation: string
   caution: string
   source: string
-  origin?: 'professora'
+  origin?: 'professora' | 'derivada'
+  selfAssess?: boolean
+  tableAnswer?: boolean
+  tables?: QuestionTable[]
 }
 
 const aula6 = 'Aula 6 · 11/09/2026'
@@ -178,7 +182,7 @@ export const questionCatalog: Question[] = [
   },
   {
     id: 'ficha-peso-receita', subject: 'ficha', topic: 'Peso na ficha técnica', type: 1,
-    origin: 'professora',
+    origin: 'derivada',
     prompt: 'Na atividade de ficha técnica de macarrão alho e óleo, os pesos dos ingredientes descritos na receita correspondem ao peso líquido (PL).',
     options: ['Verdadeiro', 'Falso'], answer: 'Verdadeiro',
     explanation: 'A lista orienta explicitamente que o descrito na receita é o PL. Para ingredientes com perdas, o PB deve ser calculado com o FC.',
@@ -189,12 +193,17 @@ export const questionCatalog: Question[] = [
   ...reviewQuestions,
 ]
 
-// Recorte da prova: sem análise sensorial ou cortes; ficha técnica apenas teórica.
+// Recorte ativo da lista: sem os exercícios completos de macarrão e biscoito.
+const hiddenRecipeQuestions = new Set(['lista-original-macarrao', 'lista-original-biscoito'])
 const hiddenCutQuestions = new Set([
   'revisao-chiffonade', 'revisao-julienne', 'revisao-brunoise', 'revisao-bastonetes',
 ])
+const duplicateQuestions = new Set([
+  'fundamentos-objetivos', 'revisao-objetivos-sete', 'revisao-padronizacao',
+  'per-capita-porcao', 'revisao-ficha-objetivos',
+])
 
 export const questions = questionCatalog.filter(question =>
-  !hiddenCutQuestions.has(question.id) &&
-    question.subject !== 'sensorial'
-    && (question.subject !== 'ficha' || question.id === 'revisao-ficha-objetivos'))
+  !hiddenCutQuestions.has(question.id) && !duplicateQuestions.has(question.id)
+    && !hiddenRecipeQuestions.has(question.id)
+    && question.subject !== 'sensorial')

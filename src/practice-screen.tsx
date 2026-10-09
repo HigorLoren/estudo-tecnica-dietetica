@@ -2,11 +2,13 @@ import { CalculationExplanation } from './calculation-explanation'
 import { useEffect, useRef } from 'preact/hooks'
 import { isAnswerReady, type Attempt, type Session } from './practice-model'
 import type { Question } from './questions'
-import { formats, subjects } from './study-data'
+import { subjects } from './study-data'
 import { Icon } from './icons'
 import { PracticeActions, PracticeNavigation, PracticeProgress } from './practice-navigation'
 import { ResultScreen } from './result-screen'
 import { QuestionHint } from './question-hint'
+import { QuestionContent, SolutionTables, questionFormat, originLabels } from './question-content'
+import { SelfAssessment } from './self-assessment'
 
 const feedbackLabels = {
   correct: 'Resposta correta', incorrect: 'Ainda não foi dessa vez',
@@ -16,6 +18,10 @@ const feedbackLabels = {
 function AnswerField({ question, value, disabled, onChange }: {
   question: Question; value: string; disabled: boolean; onChange: (value: string) => void;
 }) {
+  if (question.tableAnswer) return <p id="answer-help">Preencha as cinco células da tabela.
+    Use vírgula ou ponto e arredonde para duas casas decimais.</p>
+  if (question.selfAssess) return <SelfAssessment key={question.id} question={question}
+    value={value} disabled={disabled} onChange={onChange} />
   if (question.options) {
     return (
       <fieldset className="answer-options" disabled={disabled}>
@@ -67,6 +73,7 @@ function Feedback({ question, attempt }: { question: Question; attempt: Attempt 
         Resposta esperada: <strong>{question.answer}</strong>
       </p>}
       <CalculationExplanation question={question} />
+      <SolutionTables question={question} />
       <p>{question.explanation}</p>
       <div className="learning-note"><Icon name="bulb" size={18} />
         <p>{question.caution}</p>
@@ -110,16 +117,19 @@ export function PracticeScreen(props: Props) {
       <PracticeProgress session={session} free={free} />
       <div className="practice-layout">
         <section className="practice-card" aria-label="Questão e resposta">
-          <div className="question-meta"><span>{formats[question.type]}</span>
+          <div className="question-meta"><span>{questionFormat(question)}</span>
             <span>{free ? 'Sem pontuação' : `${points} pts`}</span></div>
           <p className="question-subject">
             {subjects.find(subject => subject.id === question.subject)?.name}
           </p>
           <h1 ref={heading} tabIndex={-1}>{question.topic}</h1>
-          <p className="question-prompt">{question.prompt}</p>
+          <p className="question-subject">{originLabels[question.origin ?? 'autoral']}</p>
+          <QuestionContent question={question} draft={value} disabled={!!attempt}
+            onChange={onDraft} />
           <QuestionHint question={question} used={session.hintedIds?.includes(question.id) ?? false}
             confirmed={!!attempt} onHint={props.onHint} />
-          <form onSubmit={event => { event.preventDefault(); if (!attempt) onConfirm() }}>
+          <form id="question-answer-form"
+            onSubmit={event => { event.preventDefault(); if (!attempt) onConfirm() }}>
             <AnswerField question={question} value={value} disabled={!!attempt}
               onChange={onDraft} />
             {attempt && <Feedback question={question} attempt={attempt} />}
