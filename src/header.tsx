@@ -1,16 +1,14 @@
 import { Icon } from './icons'
 
-export type Notice = { title: string; description: string } | null
-
-export function Header({ onNotice, onHome, onTips, onExplore, activeMode }: {
-  onNotice: (notice: Notice) => void; onHome: () => void;
-  onTips: () => void; onExplore: () => void; activeMode: number;
+export function Header({ onHome, onTips, onExplore, onFormulas, activeMode }: {
+  onHome: () => void;
+  onTips: () => void; onExplore: () => void; onFormulas: () => void; activeMode: number;
 }) {
   const modes = [
     { label: 'Praticar', icon: 'book' },
     { label: 'Explorar', icon: 'layers' },
     { label: 'Dicas', icon: 'bulb' },
-    { label: 'Repetição espaçada', icon: 'repeat' },
+    { label: 'Decorar fórmulas', icon: 'repeat' },
   ] as const
   return (
     <header className="site-header">
@@ -24,10 +22,7 @@ export function Header({ onNotice, onHome, onTips, onExplore, activeMode }: {
             <button key={item.label} className={`nav-item ${activeMode === index ? 'active' : ''}`}
               aria-current={activeMode === index ? 'page' : undefined}
               onClick={() => index === 0 ? onHome() : index === 1 ? onExplore()
-                : index === 2 ? onTips() : onNotice({
-                title: item.label,
-                description: 'Este espaço será desenvolvido em uma próxima etapa. Por enquanto, você pode experimentar a configuração do teste.',
-              })}>
+                : index === 2 ? onTips() : onFormulas()}>
               <Icon name={item.icon} size={18} />{item.label}
             </button>
           ))}

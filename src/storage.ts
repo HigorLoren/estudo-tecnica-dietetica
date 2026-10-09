@@ -1,10 +1,12 @@
+import { restoreFormulaProgress, type FormulaProgress } from './formula-model.ts'
 import { questions, questionCatalog, type Question } from './questions.ts'
 import { subjects } from './study-data.ts'
 import type { Configuration } from './configuration-screen'
 import type { Attempt, History, Session } from './practice-model'
 
 export const STORAGE_KEY = 'tecnica-dietetica:progresso'
-export type Progress = { config: Configuration; history: History; session: Session | null }
+export type Progress = { config: Configuration; history: History;
+  session: Session | null; formulas?: FormulaProgress }
 export type StorageAccess = Pick<Storage, 'getItem' | 'setItem'>
 type Data = Record<string, unknown>
 export type Recovery = { progress: Progress; message: string | null; unavailable: boolean }
@@ -111,7 +113,7 @@ function restoreSession(value: unknown, changed: Set<string>): Session | null {
 export function serializeProgress(progress: Progress) {
   const session = progress.session?.completed ? null : progress.session
   return JSON.stringify({
-    version: 1, config: progress.config, history: progress.history,
+    version: 1, formulas: progress.formulas, config: progress.config, history: progress.history,
     signatures: Object.fromEntries(questionCatalog.map(question =>
       [question.id, signature(question)])),
     session: session ? {
@@ -134,7 +136,8 @@ export function recoverProgress(raw: string): Recovery {
     !questions.some(question => question.id === id))
   return {
     progress: { config: restoreConfig(data.config), history: restoreHistory(data.history, changed),
-      session: restoreSession(data.session, changed) },
+      session: restoreSession(data.session, changed),
+      ...(data.formulas !== undefined ? { formulas: restoreFormulaProgress(data.formulas) } : {}) },
     message: changed.size || removed
       ? 'O conteúdo foi atualizado. Mantivemos as questões disponíveis; perguntas alteradas precisam de uma nova resposta.' : null,
     unavailable: false,

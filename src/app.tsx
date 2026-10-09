@@ -1,6 +1,7 @@
-import { Dialog, DialogContent, DialogTitle } from '@mui/material'
+import { FormulaScreen } from './formula-screen'
+import { newFormulaProgress, ensureFormulaProgress } from './formula-model'
 import { useRef, useState } from 'preact/hooks'
-import { Header, type Notice } from './header'
+import { Header } from './header'
 import { ConfigurationScreen } from './configuration-screen'
 import { PracticeScreen } from './practice-screen'
 import { BankScreen } from './bank-screen'
@@ -16,7 +17,7 @@ import { ExploreScreen } from './explore-screen'
 import { useNavigation, type Screen } from './use-navigation'
 
 function guideMode(screen: Screen) {
-  return screen === 'dicas' ? 2 : screen === 'explore' ? 1 : 0
+  return screen === 'formulas' ? 3 : screen === 'dicas' ? 2 : screen === 'explore' ? 1 : 0
 }
 
 function StudyGuide({ screen, onTips, onPractice }: {
@@ -30,8 +31,8 @@ export function App() {
   const { progress, getProgress, updateProgress, storageUnavailable, recoveryMessage,
     dismissRecovery } = useProgress()
   const { config, session, history } = progress
-  const [notice, setNotice] = useState<Notice>(null)
   const [screen, setScreen] = useNavigation()
+  const [initialFormulas] = useState(newFormulaProgress)
   const [filters, setFilters] = useState<BankFilters>({ subject: 'all', type: 'all' })
   const [freeSession, setFreeSession] = useState<Session | null>(null)
   const freeCurrent = useRef<Session | null>(null)
@@ -99,16 +100,19 @@ export function App() {
   }
   return (
     <>
-      <Header onNotice={setNotice} onHome={onBack}
+      <Header onHome={onBack}
         onTips={() => setScreen('dicas')} onExplore={() => setScreen('explore')}
-        activeMode={guideMode(screen)} />
+        onFormulas={() => setScreen('formulas')} activeMode={guideMode(screen)} />
       {storageUnavailable && <div className="app-status warning" role="status">
         Não foi possível salvar o progresso neste navegador. Você pode continuar estudando;
         os novos dados ficam disponíveis apenas enquanto esta página estiver aberta.
       </div>}
       {recoveryMessage && <div className="app-status" role="status"><span>{recoveryMessage}</span>
         <button className="text-button" onClick={dismissRecovery}>Entendi</button></div>}
-      {['explore', 'dicas'].includes(screen) ? <StudyGuide screen={screen}
+      {screen === 'formulas' ? <FormulaScreen progress={ensureFormulaProgress(progress.formulas, initialFormulas)}
+        onChange={update => updateProgress(current => ({ ...current,
+          formulas: update(ensureFormulaProgress(current.formulas, initialFormulas)) }))} />
+        : ['explore', 'dicas'].includes(screen) ? <StudyGuide screen={screen}
         onTips={() => setScreen('dicas')}
         onPractice={() => { setFilters({ subject: 'indicadores', type: 'all' }); setScreen('bank') }} />
         : (screen === 'practice' || free) && active ? <PracticeScreen session={active}
@@ -123,13 +127,6 @@ export function App() {
           history={history} session={session} onStart={onStart}
           onResume={() => setScreen('practice')} onOpenBank={() => setScreen('bank')}
           storageUnavailable={storageUnavailable} />}
-      <Dialog open={notice !== null} onClose={() => setNotice(null)}
-        aria-labelledby="preview-title" maxWidth="xs" fullWidth>
-        <DialogTitle id="preview-title">{notice?.title}</DialogTitle>
-        <DialogContent><p className="dialog-description">{notice?.description}</p>
-          <button className="primary-button" onClick={() => setNotice(null)}>Entendi</button>
-        </DialogContent>
-      </Dialog>
     </>
   )
 }
