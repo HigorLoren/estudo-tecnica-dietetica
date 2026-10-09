@@ -11,15 +11,15 @@ import { confirmSession, createSession, prepareQuestions, recordAttempt,
   type Session } from './practice-model'
 import { useProgress } from './use-progress'
 import { createReviewConfiguration } from './result-model'
-
-type Screen = 'configuration' | 'practice' | 'bank' | 'free'
+import { TipsScreen } from './tips-screen'
+import { useNavigation } from './use-navigation'
 
 export function App() {
   const { progress, getProgress, updateProgress, storageUnavailable, recoveryMessage,
     dismissRecovery } = useProgress()
   const { config, session, history } = progress
   const [notice, setNotice] = useState<Notice>(null)
-  const [screen, setScreen] = useState<Screen>('configuration')
+  const [screen, setScreen] = useNavigation()
   const [filters, setFilters] = useState<BankFilters>({ subject: 'all', type: 'all' })
   const [freeSession, setFreeSession] = useState<Session | null>(null)
   const freeCurrent = useRef<Session | null>(null)
@@ -80,14 +80,15 @@ export function App() {
   }
   return (
     <>
-      <Header onNotice={setNotice} onHome={onBack} />
+      <Header onNotice={setNotice} onHome={onBack}
+        onTips={() => setScreen('dicas')} tipsActive={screen === 'dicas'} />
       {storageUnavailable && <div className="app-status warning" role="status">
         Não foi possível salvar o progresso neste navegador. Você pode continuar estudando;
         os novos dados ficam disponíveis apenas enquanto esta página estiver aberta.
       </div>}
       {recoveryMessage && <div className="app-status" role="status"><span>{recoveryMessage}</span>
         <button className="text-button" onClick={dismissRecovery}>Entendi</button></div>}
-      {(screen === 'practice' || free) && active ? <PracticeScreen session={active}
+      {screen === 'dicas' ? <TipsScreen /> : (screen === 'practice' || free) && active ? <PracticeScreen session={active}
         onDraft={onDraft} onConfirm={onConfirm} onNext={onNext} free={free} onJump={onJump}
         onBack={free ? () => setScreen('bank') : onBack} onRestart={onRestart}
         onReview={onReview} onOpenBank={() => setScreen('bank')} />

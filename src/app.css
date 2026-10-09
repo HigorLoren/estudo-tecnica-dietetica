@@ -392,3 +392,84 @@ select:focus-visible { outline: 3px solid #3688b1; outline-offset: 3px; }
   .result-filters { width: 100%; }
   .result-filters button { flex: 1; }
 }
+.tips-page { padding-bottom: 50px; }
+.tips-page h1:focus { outline: none; }
+.tips-search-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 30px; margin: 30px 0 36px; }
+.tips-search { width: 100%; max-width: 650px; }
+.tips-search label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 10px; }
+.tips-search > div { display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 0 15px; background: #fff; border: 1px solid #cfdee7; border-radius: 9px; color: #6b8c9d; }
+.tips-search > div:focus-within { border-color: #236783; box-shadow: 0 0 0 3px #23678314; }
+.tips-search input { flex: 1; min-width: 0; border: 0; background: transparent; color: #183648; padding: 15px 0; font-size: 14px; }
+.tips-search input:focus { outline: none; }
+.tips-search input::placeholder { color: #8197a3; font-size: 12px; }
+.tips-search button { display: grid; place-items: center; border: 0; background: #eef4f7; color: #637782; border-radius: 5px; min-width: 32px; min-height: 32px; }
+.tips-search-row > p { color: #637782; font-size: 12px; flex-shrink: 0; margin: 0 0 4px; }
+.tips-search-row > p strong { color: #236783; font-weight: 600; }
+.tips-search-row > p span { display: block; font-size: 10px; margin-top: 7px; color: #8196a2; }
+.tips-layout { display: grid; grid-template-columns: 205px minmax(0, 1fr); gap: 37px; align-items: start; }
+.tips-index { position: sticky; top: 25px; }
+.tips-index h2 { font-size: 13px; font-weight: 600; margin: 0 0 14px; }
+.tips-index nav { display: flex; flex-direction: column; gap: 5px; border-left: 1px solid #dbe6ed; padding: 0 0 0 10px; margin: 0; overflow: visible; }
+.tips-index a { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 11px 12px; font-size: 12px; color: #637782; text-decoration: none; border-radius: 6px; min-height: 44px; }
+.tips-index a:hover { color: #236783; background: #edf4f8; }
+.tips-index a[aria-current] { color: #236783; background: #e5f0f6; font-weight: 600; }
+.tips-index small { font-size: 10px; color: #839ba8; }
+.tips-index > p { color: #7b929f; font-size: 11px; line-height: 1.9; margin: 24px 12px 0; }
+.tips-group { scroll-margin-top: 25px; }
+.tips-group + .tips-group { margin-top: 36px; }
+.tips-group-heading { margin-bottom: 18px; }
+.tips-group-heading h2 { margin: 0 0 8px; font-size: 21px; font-weight: 600; letter-spacing: -.4px; }
+.tips-group-heading p { margin: 0; color: #637782; font-size: 12px; line-height: 1.8; }
+.tip-card { background: #fff; border: 1px solid #dce7ed; border-radius: 12px; padding: 27px 30px; }
+.tip-card + .tip-card { margin-top: 17px; }
+.tip-card > h3 { font-size: 18px; font-weight: 600; letter-spacing: -.3px; margin: 0 0 15px; line-height: 1.55; }
+.tip-concept { font-size: 14px; line-height: 1.95; margin: 0; max-width: 75ch; }
+.tip-formula { font-size: 16px; line-height: 1.8; font-weight: 600; color: #236783; border-left: 3px solid #669bb3; padding: 13px 18px; background: #f0f7fa; border-radius: 0 6px 6px 0; margin: 20px 0; overflow-wrap: anywhere; }
+.tip-example { margin-top: 20px; }
+.tip-card h4 { margin: 0 0 6px; font-size: 12px; font-weight: 600; }
+.tip-example p { font-size: 13px; color: #526f7f; line-height: 1.9; margin: 0; }
+.tip-memory { display: flex; gap: 11px; align-items: flex-start; padding: 18px; background: #f8faf6; border: 1px solid #e5eade; border-radius: 7px; margin-top: 20px; color: #536d59; }
+.tip-memory > svg { flex-shrink: 0; margin-top: 2px; }
+.tip-memory p { font-size: 12px; line-height: 1.85; margin: 0; }
+.tip-memory small { display: block; font-size: 9px; margin-top: 9px; color: #809182; }
+.tip-caution { display: flex; gap: 14px; border-top: 1px solid #e7edf1; padding-top: 17px; margin-top: 20px; }
+.tip-caution > strong { flex-shrink: 0; font-size: 11px; color: #7b683f; padding-top: 3px; }
+.tip-caution p { font-size: 12px; color: #637782; line-height: 1.85; margin: 0; }
+.tip-references { display: flex; flex-wrap: wrap; gap: 5px 12px; color: #8a9ca6; font-size: 10px; line-height: 1.8; margin-top: 17px; }
+.tip-references a { color: #6d8998; text-underline-offset: 3px; }
+.tip-references a > span { color: #8398a4; }
+.tips-sources { border-top: 1px solid #dce6ed; padding-top: 27px; margin-top: 38px; scroll-margin-top: 25px; }
+.tips-sources h2 { font-size: 21px; font-weight: 600; letter-spacing: -.4px; margin: 0 0 12px; }
+.tips-sources > p { font-size: 12px; color: #637782; line-height: 1.9; margin: 0 0 24px; }
+.tips-sources article { display: flex; gap: 12px; padding: 16px 0; border-bottom: 1px solid #e3ebf0; scroll-margin-top: 25px; }
+.tips-sources article > span { color: #7694a4; padding-top: 2px; }
+.tips-sources h3 { font-size: 12px; font-weight: 600; margin: 0 0 5px; }
+.tips-sources article p { font-size: 11px; line-height: 1.85; color: #637782; margin: 0; }
+.tips-sources .tips-sources-note { font-size: 10px; margin: 20px 0 0; }
+.tips-empty { background: #fff; border: 1px solid #dce7ed; border-radius: 12px; text-align: center; padding: 45px 25px; color: #637782; }
+.tips-empty > svg { color: #6b96aa; }
+.tips-empty h2 { font-size: 20px; color: #183648; font-weight: 600; }
+.tips-empty p { font-size: 13px; line-height: 1.9; }
+.tips-empty .outline-button { margin: 23px auto 0; }
+@media (max-width: 850px) {
+  .tips-layout { grid-template-columns: 170px minmax(0, 1fr); gap: 24px; }
+  .tips-index a { padding-left: 8px; padding-right: 8px; font-size: 11px; }
+  .tip-card { padding: 24px; }
+}
+@media (max-width: 650px) {
+  .tips-layout { grid-template-columns: 1fr; gap: 25px; }
+  .tips-index { position: static; }
+  .tips-index nav { display: grid; grid-template-columns: 1fr 1fr; border-left: 0; padding: 0; gap: 7px; }
+  .tips-index a { background: #eef4f7; border: 1px solid #e0e9ef; padding: 10px; font-size: 11px; }
+  .tips-index a:last-child { grid-column: 1 / -1; }
+  .tips-index > p { display: none; }
+  .tips-search-row { display: block; margin-bottom: 27px; }
+  .tips-search-row > p { margin: 14px 0 0; font-size: 11px; }
+  .tips-search-row > p span { display: inline; margin-left: 7px; }
+  .tips-group-heading h2 { font-size: 20px; }
+  .tip-card { padding: 23px 20px; }
+  .tip-card > h3 { font-size: 17px; }
+  .tip-concept { font-size: 13px; }
+  .tip-formula { padding: 12px 14px; font-size: 14px; }
+  .tip-caution { flex-direction: column; gap: 7px; }
+}

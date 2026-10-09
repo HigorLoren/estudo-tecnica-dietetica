@@ -2,8 +2,9 @@ import { Icon } from './icons'
 
 export type Notice = { title: string; description: string } | null
 
-export function Header({ onNotice, onHome }: {
+export function Header({ onNotice, onHome, onTips, tipsActive }: {
   onNotice: (notice: Notice) => void; onHome: () => void;
+  onTips: () => void; tipsActive: boolean;
 }) {
   const modes = [
     { label: 'Praticar', icon: 'book' },
@@ -21,9 +22,9 @@ export function Header({ onNotice, onHome }: {
         </a>
         <nav aria-label="Modos de estudo">
           {modes.map((item, index) => (
-            <button key={item.label} className={`nav-item ${index === 0 ? 'active' : ''}`}
-              aria-current={index === 0 ? 'page' : undefined}
-              onClick={() => index === 0 ? onHome() : onNotice({
+            <button key={item.label} className={`nav-item ${(tipsActive ? index === 2 : index === 0) ? 'active' : ''}`}
+              aria-current={(tipsActive ? index === 2 : index === 0) ? 'page' : undefined}
+              onClick={() => index === 0 ? onHome() : index === 2 ? onTips() : onNotice({
                 title: item.label,
                 description: 'Este espaço será desenvolvido em uma próxima etapa. Por enquanto, você pode experimentar a configuração do teste.',
               })}>
