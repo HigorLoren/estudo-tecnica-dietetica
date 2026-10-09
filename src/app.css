@@ -1,0 +1,11 @@
+.app {
+  padding-top: 6rem;
+}
+
+.card {
+  padding: 2.5rem;
+}
+
+.card > * + * {
+  margin-top: 1rem;
+}
