@@ -9,7 +9,9 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit -p tsconfig.app.json && tsc --noEmit -p tsconfig.node.json",
     "build": "npm run lint && npm run typecheck && vite build",
-    "test": "node --test tests/*.test.ts"
+    "test": "node --test tests/*.test.ts",
+    "build:readable": "npm run lint && npm run typecheck && vite build --config vite.readable.config.ts",
+    "preview:readable": "vite preview --config vite.readable.config.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -26,5 +28,6 @@
     "eslint": "^10.12.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "typescript-eslint": "^8.71.1"
-  }
+  },
+  "description": "Plataforma de estudo de Técnica Dietética com questões, simulador e treino de fórmulas."
 }
